@@ -1,0 +1,51 @@
+<objects>
+<object Name="Rubble" Load="Merge">
+    <part Name="acegiak_Buildable" Result="MortarWall" Count="1" ResultName="Stone Wall"></part>
+</object>
+
+  
+  <object Name="MortarWall" Inherits="BaseWallRock">
+    <part Name="Render" DisplayName="stone wall" ColorString="&amp;w^y" Occluding="true" />
+    <stat Name="AV" Value="10" />
+    <stat Name="Hitpoints" Value="200" />
+    <part Name="Description" Short="Mismatched stones bound into single service by callous mortar." />
+  </object>
+
+
+
+<object Name="Small Stone" Load="Merge">
+    <part Name="acegiak_Buildable" Result="Rubble" Count="25"></part>
+  </object>
+
+  <object Name="Large Stone" Load="Merge">
+    <part Name="acegiak_Buildable" Result="Rubble" ResultName="Rubble" Count="10"></part>
+    <part Name="Stacker" />
+
+  </object>
+
+
+    <object Name="BaseWallRock"  Load="Merge">
+        <part Name="Corpse" CorpseChance="25" CorpseBlueprint="Large Stone" BodyDrop="false" InventoryDrop="true" />
+
+    </object>
+
+
+  <object Name="BaseWallStone" Load="Merge">
+    <part Name="Corpse" CorpseChance="25" CorpseBlueprint="Large Stone" BodyDrop="false" InventoryDrop="true" />
+
+  </object>
+
+
+  <object Name="Starapple" Load="Merge">
+    <part Name="Corpse" CorpseChance="100" CorpseBlueprint="Starapple Seed" BodyDrop="false" InventoryDrop="true" />
+  </object>
+
+
+    <object Name="Starapple Seed"  Inherits="Item">
+        <part Name="Physics" Weight="0" Takeable="true" Solid="false"></part>
+        <part Name="Render" DisplayName="starapple seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
+        <part Name="Description" Short="One tiny point from a glistening star."></part>
+        <part Name="acegiak_Seed" Result="Starapple Tree"></part>
+
+    </object>
+  </objects>

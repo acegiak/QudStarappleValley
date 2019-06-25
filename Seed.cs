@@ -108,7 +108,7 @@ namespace XRL.World.Parts
                 if(this.growth >=stageLength){
                 
                     for(int i = 0; i < growth/stageLength;i++){
-                        IPart.AddPlayerMessage("TICKS!");
+//                        IPart.AddPlayerMessage("TICKS!");
 
                         Tick();
                     }

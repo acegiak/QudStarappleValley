@@ -77,7 +77,18 @@ namespace XRL.World.Parts
         public void Water(int drams){
             Ticks();
             this.wateramount += drams;
+            //Absorb(drams);
 
+        }
+
+        public void Absorb(int drams){
+            Cell cell = ParentObject.CurrentCell;
+            foreach(GameObject GO in cell.GetObjects()){
+                LiquidVolume volume = GO.GetPart<LiquidVolume>();
+                if(volume != null){
+                    volume.UseDrams(drams);
+                }
+            }
         }
 
 
@@ -101,7 +112,7 @@ namespace XRL.World.Parts
 
                         Tick();
                     }
-                    
+                    Absorb(5);
                     this.growth = this.growth % stageLength;
                     tileupdate();
 
@@ -197,6 +208,7 @@ namespace XRL.World.Parts
                     if(volume.GetLiquidName().Contains("fresh water")){
                         // Popup.Show("'e got wet:"+((LiquidCovered)effect).ContactDrams);
                         Water(((LiquidCovered)effect).ContactDrams);
+                        volume.Volume = 0;
                     }
                 }
             }

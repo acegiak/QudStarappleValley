@@ -45,7 +45,26 @@
         <part Name="Physics" Weight="0" Takeable="true" Solid="false"></part>
         <part Name="Render" DisplayName="starapple seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
         <part Name="Description" Short="One tiny point from a glistening star."></part>
-        <part Name="acegiak_Seed" Result="Starapple Tree"></part>
+        <part Name="acegiak_Seed" Result="Starapple Tree" ResultName="Starapple"></part>
 
     </object>
+
+    <object Name="Witchwood Seed"  Inherits="Item">
+        <part Name="Physics" Weight="0" Takeable="true" Solid="false"></part>
+        <part Name="Render" DisplayName="witchwood seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="W" Occluding="false"></part>
+        <part Name="Description" Short="A grain of madness, ready to bloom."></part>
+        <part Name="acegiak_Seed" Result="Witchwood Tree" ResultName="witchwood"></part>
+
+    </object>
+
+      <object Name="Witchwood Tree" Load="Merge">
+    <part Name="Corpse" CorpseChance="20" CorpseBlueprint="Witchwood Seed" BodyDrop="false" InventoryDrop="true" />
+  </object>
+
+
+  <object Name="Dreadroot Tuber" Load="Merge">
+        <part Name="acegiak_Seed" Result="Dreadroot" ResultName="dreadroot"></part>
+  </object>
+
+  
   </objects>

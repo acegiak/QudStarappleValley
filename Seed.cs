@@ -162,27 +162,27 @@ namespace XRL.World.Parts
 
         public void tileupdate(){
             if(this.Dead){
-                ParentObject.pRender.Tile = "Items/sw_smallstone.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseeddead.png";
                 this.displayname = "husk";
                 this.description = "This plant has withered and died.";
             }
             if(this.stage == 1){
-                ParentObject.pRender.Tile = "creatures/sw_yonderbrush.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed1.png";
                 this.displayname = "seed";
                 this.description = "The seed has been planted in the earth.";
             }
             if(this.stage == 2){
-                ParentObject.pRender.Tile = "Creatures/sw_sprouting_orb.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed2.png";
                 this.displayname = "sprout";
                 this.description = "It has sprouted from the earth.";
             }
             if(this.stage == 3){
-                ParentObject.pRender.Tile = "creatures/sw_weeds1.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed3.png";
                 this.displayname = "seedling";
                 this.description = "A "+this.ResultName+" sprout has grown into a seedling.";
             }
             if(this.stage == 4){
-                ParentObject.pRender.Tile = "Assets_Content_Textures_Tiles_sw_watervine1.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed4.png";
                 this.displayname = "plant";
                 this.description = "A "+this.ResultName+" plant is growing here.";
             }

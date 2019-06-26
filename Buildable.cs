@@ -3,6 +3,7 @@ using XRL.Rules;
 using XRL.UI;
 using XRL.World.Parts.Effects;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XRL.World.Parts
 {
@@ -45,20 +46,25 @@ namespace XRL.World.Parts
                 Popup.Show("Put things on the ground to build with them.");
                 return;
             }
-            List<GameObject> bits = cell.GetObjects(ParentObject.Blueprint);
-            int bitcount = 0;
-            foreach(GameObject go in bits){
-                bitcount+= go.Count;
-            }
-            if(bitcount < this.Count){
-                Popup.Show("You need "+ParentObject.DisplayNameOnly+"x"+this.Count.ToString()+" to build: "+this.ResultName+".");
+			GameObjectBlueprint bp = getBuilds().FirstOrDefault();
+			if(bp == null){
+                Popup.Show("There's nothing that uses those parts.");
                 return;
-            }
-            foreach(GameObject go in bits){
-                cell.RemoveObject(go);
-            }
-            cell.AddObject(GameObject.create(Result));
+			}
+			GameObject go = bp.createOne();
+            go.GetPart<acegiak_CanBuild>().Build(cell);
         }
+
+		public List<GameObjectBlueprint> getBuilds(){
+			List<GameObjectBlueprint> ret = new List<GameObjectBlueprint>();
+			foreach (GameObjectBlueprint blueprint in GameObjectFactory.Factory.BlueprintList)
+			{
+				if(acegiak_CanBuild.ExplodeNeeds(blueprint.GetPartParameter("acegiak_CanBuild","Needs")).ContainsKey(ParentObject.GetBlueprint().Name)){
+					ret.Add(blueprint);
+				}
+			}
+			return ret;
+		}
 
 
 		public override bool FireEvent(Event E)
@@ -67,7 +73,7 @@ namespace XRL.World.Parts
 				{
 					if (ParentObject.Understood() && ParentObject.pPhysics.CurrentCell != null)
 					{
-						E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Build", 'B', false, "&WB&yuild: "+this.ResultName, "InvCommandBuild", 5);
+						E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Build", 'B', false, "&WB&yuild", "InvCommandBuild", 5);
 					}
 				}
 				else if (E.ID == "InvCommandBuild")

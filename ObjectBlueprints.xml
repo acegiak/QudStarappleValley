@@ -1,10 +1,12 @@
 <objects>
 <object Name="Rubble" Load="Merge">
-    <part Name="acegiak_Buildable" Result="MortarWall" Count="1" ResultName="Stone Wall"></part>
+    <part Name="acegiak_Buildable"></part>
+    <part Name="acegiak_CanBuild" Needs="Large Stone:10"/>
 </object>
 
   
   <object Name="MortarWall" Inherits="BaseWallRock">
+    <part Name="acegiak_CanBuild" Needs="Rubble:1"/>
     <part Name="Render" DisplayName="stone wall" ColorString="&amp;w^y" Occluding="true" />
     <stat Name="AV" Value="10" />
     <stat Name="Hitpoints" Value="200" />
@@ -13,15 +15,21 @@
 
 
 
-<object Name="Small Stone" Load="Merge">
-    <part Name="acegiak_Buildable" Result="Rubble" Count="25"></part>
-  </object>
 
   <object Name="Large Stone" Load="Merge">
-    <part Name="acegiak_Buildable" Result="Rubble" ResultName="Rubble" Count="10"></part>
-    <part Name="Stacker" />
+      <part Name="acegiak_Buildable"></part>
+      <part Name="Stacker" />
+  
+    </object>
+    <object Name="Scrap Metal" Load="Merge">
+      <part Name="acegiak_Buildable"></part>
+  
+    </object>
 
-  </object>
+    <object Name="Door" Load="Merge">
+      <part Name="acegiak_CanBuild" Needs="Scrap Metal:5"></part>
+    </object>
+
 
   <object Name="Plant" Load="Merge">
     <part Name="acegiak_SeedDropper"></part>

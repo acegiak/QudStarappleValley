@@ -23,6 +23,10 @@
 
   </object>
 
+  <object Name="Plant" Load="Merge">
+    <part Name="acegiak_SeedDropper"></part>
+  </object>
+
 
     <object Name="BaseWallRock"  Load="Merge">
         <part Name="Corpse" CorpseChance="25" CorpseBlueprint="Large Stone" BodyDrop="false" InventoryDrop="true" />
@@ -57,13 +61,21 @@
 
     </object>
 
-      <object Name="Witchwood Tree" Load="Merge">
-    <part Name="Corpse" CorpseChance="20" CorpseBlueprint="Witchwood Seed" BodyDrop="false" InventoryDrop="true" />
+  <object Name="Dreadroot" Load="Merge">
+    <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine" Chance="0"></part>
   </object>
-
 
   <object Name="Dreadroot Tuber" Load="Merge">
         <part Name="acegiak_Seed" Result="Dreadroot" ResultName="dreadroot"></part>
+  </object>
+
+
+
+  <object Name="Seed"  Inherits="Item">
+    <part Name="Physics" Weight="0" Takeable="true" Solid="false"></part>
+    <part Name="Render" DisplayName="seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
+    <part Name="Description" Short="One tiny point from a glistening star."></part>
+    <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
   </object>
 
   

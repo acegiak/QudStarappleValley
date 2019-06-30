@@ -5,6 +5,7 @@ using XRL.Core;
 using XRL.World.Parts.Effects;
 using System.Collections.Generic;
 using System.Text;
+using XRL.Liquids;
 
 namespace XRL.World.Parts
 {
@@ -28,14 +29,20 @@ namespace XRL.World.Parts
 
         public string ResultName;
 
-        private string displayname;
-        private string description;
+        public string displayname;
+        public string description;
 
 
 
 		public acegiak_Seed()
 		{
 		}
+		public override bool SameAs(IPart p)
+		{
+            
+			return false;
+		}
+
 
 
 
@@ -62,9 +69,18 @@ namespace XRL.World.Parts
                 Popup.Show("Put things on the ground to plant them.");
                 return;
             }
+            if(ParentObject.GetPart<Stacker>() != null && ParentObject.GetPart<Stacker>().StackCount > 1){
+                GameObject gameObject = ParentObject.DeepCopy(true);
+                gameObject.GetPart<Stacker>().StackCount = ParentObject.GetPart<Stacker>().StackCount -1;
+                ParentObject.GetPart<Stacker>().StackCount = 1;
+                who.GetPart<Inventory>().AddObject(gameObject);
+                IPart.AddPlayerMessage("You plant one "+ParentObject.DisplayNameOnly+" and collect the rest");
+            }
 
             ParentObject.pPhysics.Takeable = false;
             this.stage = 1;
+            ParentObject.pPhysics.Category = "Plant";
+            ParentObject.RemovePart<NoEffects>();
             tileupdate();
             // Statistic statistic = new Statistic("Energy", 0, 10000, 0, ParentObject);
             // statistic.Owner = ParentObject;
@@ -80,6 +96,21 @@ namespace XRL.World.Parts
             //Absorb(drams);
 
         }
+
+        public LiquidVolume GetPuddle(){
+            Cell cell = ParentObject.CurrentCell;
+            foreach(GameObject GO in cell.GetObjects()){
+                LiquidVolume volume = GO.GetPart<LiquidVolume>();
+                if(volume != null){
+                    return volume;
+                }
+            }
+            return null;
+        }
+
+
+
+
 
         public void Absorb(int drams){
             Cell cell = ParentObject.CurrentCell;
@@ -108,7 +139,7 @@ namespace XRL.World.Parts
                 if(this.growth >=stageLength){
                 
                     for(int i = 0; i < growth/stageLength;i++){
-//                        IPart.AddPlayerMessage("TICKS!");
+                        //IPart.AddPlayerMessage("TICKS!");
 
                         Tick();
                     }
@@ -135,12 +166,10 @@ namespace XRL.World.Parts
         }
 
         public void Tick(){
-
-            wateramount--;
-            if(wateramount < 0){
-                wateramount = 0;
-            }
-            if(wateramount <= 0 || wateramount >=10){
+            if(GetPuddle() == null
+            || GetPuddle().GetPrimaryLiquid().GetKeyString() == "water"
+            || GetPuddle().Volume <= 0
+            || GetPuddle().Volume > 10){
                 health--;
             }else{
                 health++;
@@ -152,37 +181,67 @@ namespace XRL.World.Parts
             if(health <= -5){
                 this.Dead = true;
             }
+            if(GetPuddle() != null){
+                GetPuddle().ComponentLiquids[0]--;
+                GetPuddle().Volume--;
+                if (GetPuddle().Volume <= 0)
+                {
+                    GetPuddle().Empty();
+                }
+                else
+                {
+                    GetPuddle().NormalizeProportions();
+                }
+                GetPuddle().RecalculatePrimary();
+                GetPuddle().RecalculateProperties();
+                GetPuddle().FlushWeightCaches();
+            }
         }
 
         public string debugstring(){
             // return "Water:"+wateramount.ToString()+" Health:"+health.ToString()+" Stage:"+stage.ToString()+(Dead?" Dead":(wateramount>7?"Drowning":(wateramount<=2?"Dry":" Alive")))+this.growth.ToString();
-            return (Dead?"dead":(wateramount>7?"drowning":(wateramount<=2?"dry":"thriving")));
+            if(Dead){
+                return "dead";
+            }
+            if(GetPuddle() == null){
+                return "dry";
+            }
+            if(GetPuddle().Volume > 7){
+                return "drowning";
+            }
+            if(GetPuddle().Volume <3){
+                return "dry";
+            }
+            if(GetPuddle().GetPrimaryLiquid().GetKeyString() == "water"){
+                return "thriving";
+            }
+            return "choking on "+GetPuddle().GetPrimaryLiquid().GetKeyString();
         }
 
 
         public void tileupdate(){
             if(this.Dead){
-                ParentObject.pRender.Tile = "Items/sw_smallstone.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseeddead.png";
                 this.displayname = "husk";
                 this.description = "This plant has withered and died.";
             }
             if(this.stage == 1){
-                ParentObject.pRender.Tile = "creatures/sw_yonderbrush.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed1.png";
                 this.displayname = "seed";
                 this.description = "The seed has been planted in the earth.";
             }
             if(this.stage == 2){
-                ParentObject.pRender.Tile = "Creatures/sw_sprouting_orb.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed2.png";
                 this.displayname = "sprout";
                 this.description = "It has sprouted from the earth.";
             }
             if(this.stage == 3){
-                ParentObject.pRender.Tile = "creatures/sw_weeds1.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed3.png";
                 this.displayname = "seedling";
                 this.description = "A "+this.ResultName+" sprout has grown into a seedling.";
             }
             if(this.stage == 4){
-                ParentObject.pRender.Tile = "Assets_Content_Textures_Tiles_sw_watervine1.bmp";
+                ParentObject.pRender.Tile = "Items/plantedseed4.png";
                 this.displayname = "plant";
                 this.description = "A "+this.ResultName+" plant is growing here.";
             }
@@ -201,22 +260,31 @@ namespace XRL.World.Parts
                 Plant(E.GetParameter<GameObject>("Owner"));
                         E.RequestInterfaceExit();
             }else
-            if(E.ID == "ApplyEffect" && !ParentObject.pPhysics.Takeable){
-                Effect effect = E.GetParameter("Effect") as Effect;     
-                if(effect != null && effect is LiquidCovered){
-                    LiquidVolume volume = ((LiquidCovered)effect).Liquid;
-                    if(volume.GetLiquidName().Contains("fresh water")){
-                        // Popup.Show("'e got wet:"+((LiquidCovered)effect).ContactDrams);
-                        Water(((LiquidCovered)effect).ContactDrams);
-                        volume.Volume = 0;
-                    }
-                }
-            }
+            // if(E.ID == "ApplyEffect"){
+
+            //     Popup.Show("'e got an effect");
+            //     Effect effect = E.GetParameter("Effect") as Effect;     
+            //     if(effect != null && effect is LiquidCovered){
+            //         Popup.Show("'e got liquidcovered:");
+
+            //         LiquidVolume volume = ((LiquidCovered)effect).Liquid;
+            //         if(volume.GetLiquidName().Contains("fresh water")){
+            //              Popup.Show("'e got wet:"+((LiquidCovered)effect).ContactDrams);
+            //             Water(((LiquidCovered)effect).ContactDrams);
+            //             volume.Volume = 0;
+            //         }
+            //     }
+            // }
             if (E.ID == "EndTurn"){
                 Ticks();
             }
             if (E.ID == "GetShortDescription" && this.stage > 0){
-                E.SetParameter("ShortDescription", this.description );
+                string debug = "";
+                E.SetParameter("ShortDescription", this.description
+                +GetPuddle().GetPrimaryLiquid().GetKeyString()+":"
+                +GetPuddle().ComponentLiquids[GetPuddle.bPrimary].ToString()
+                +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
+                +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString());
             }
             if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
                  if(this.stage > 0){

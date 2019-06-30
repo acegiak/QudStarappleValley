@@ -279,7 +279,12 @@ namespace XRL.World.Parts
                 Ticks();
             }
             if (E.ID == "GetShortDescription" && this.stage > 0){
-                E.SetParameter("ShortDescription", this.description );
+                string debug = "";
+                E.SetParameter("ShortDescription", this.description
+                +GetPuddle().GetPrimaryLiquid().GetKeyString()+":"
+                +GetPuddle().ComponentLiquids[GetPuddle.bPrimary].ToString()
+                +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
+                +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString());
             }
             if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
                  if(this.stage > 0){

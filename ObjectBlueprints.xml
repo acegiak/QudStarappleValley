@@ -84,6 +84,7 @@
     <part Name="Render" DisplayName="seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
     <part Name="Description" Short="One tiny point from a glistening star."></part>
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
+    <part Name="Stacker" />
   </object>
 
 
@@ -92,15 +93,40 @@
     <part Name="acegiak_Seed" Result="Slug Tree" ResultName="slug"></part>
   </object>
 
-  <object Name="Slug Tree" Inherits="Plant">
+  <object Name="Slug Tree" Inherits="Plant Turret">
     <part Name="Render" DisplayName="slug tree" ColorString="&amp;w" Tile="terrain/sw_fattree1.bmp" TileColor="&amp;w" DetailColor="y" Occluding="true"></part>
-    <part Name="Description" Short="A tangled nest of roots spill through the earth. The bark is splintered into pointy spines. The leaves are greasy and stinking."></part>
+    <part Name="Description" Short="A tanlge of wiry boughs and leaden leaves, sheening in the light."></part>
     <tag Name="HangingSupport" />
     <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="acegiak_SeedDropper" Chance="10" Seed="Lead Slug"></part>
-    <part Name="Harvestable" OnSuccess="LeadSlug" OnSuccessAmount="3d12" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y"></part>
+    <part Name="Harvestable" OnSuccess="Lead Slug" OnSuccessAmount="3d12" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y"></part>
+    <part Name="Body" Builder="BodyVine" />
+    <part Name="Brain" PointBlankRange="true" />
+    <inventoryobject Blueprint="Seed Slugshot" />
   </object>
 
+  <object Name="Seed Slugshot" Inherits="BaseMagazineRifle">
+    <part Name="Render" DisplayName="slug spitter" RenderString=")" Tile="Items/sw_wheat_stem.bmp" ColorString="&amp;w" DetailColor="y" />
+    <part Name="Physics" bUsesTwoSlots="true" />
+    <part Name="Commerce" Value="25" />
+    <part Name="MissileWeapon" Skill="Rifle" ShotsPerAction="1" AmmoPerAction="1" ShotsPerAnimation="1" WeaponAccuracy="20" />
+    <part Name="BioAmmoLoader" MaxCapacity="20" Available="20" TurnsToGenerate="5" ProjectileObject="ProjectileLeadSlug" LiquidConsumed="oil" ConsumePure="false" ConsumeAmount="1" ConsumeChance="20" />
+    <part Name="LiquidVolume" MaxVolume="4" StartVolume="4" InitialLiquid="oil-1000" />
+    <part Name="LiquidProducer" Liquid="oil" Rate="35" FillSelfOnly="true" IsTechScannable="false" WorksOnEquipper="true" WorksOnSelf="false" RequiresBodyPartCategory="Plant" />
+    <part Name="Description" Short="Compacted seed matter that's been stuffed into the leaf-mitt of a coiled tendril." />
+    <tag Name="Tier" Value="2" />
+    <tag Name="ReloadSound" Value="SplashStep1" />
+    <tag Name="MissileFireSound" Value="SeedSpit" />
+  </object>
+
+<object Name="Watering Can" Inherits="Tool">
+    <part Name="Render" DisplayName="&amp;cwatering can" Tile="Tiles/sw_box.bmp" ColorString="&amp;c" DetailColor="C"></part>
+    <part Name="Description" Short="Pours liquid, a single dram at a time."></part>
+    <part Name="Metal"></part>
+    <part Name="LiquidVolume" MaxVolume="64" Volume="64" StartVolume="1d12-1" InitialLiquid="water-1000" ManualSeal="true" />
+    <part Name="acegiak_Watering"></part>
+
+  </object>
   
   </objects>

@@ -79,8 +79,8 @@ namespace XRL.World.Parts
 
             ParentObject.pPhysics.Takeable = false;
             this.stage = 1;
-            ParentObject.pPhysics.Category = "Plant";
-            ParentObject.RemovePart<NoEffects>();
+            //ParentObject.pPhysics.Category = "Plant";
+            //ParentObject.RemovePart<NoEffects>();
             tileupdate();
             // Statistic statistic = new Statistic("Energy", 0, 10000, 0, ParentObject);
             // statistic.Owner = ParentObject;
@@ -143,7 +143,6 @@ namespace XRL.World.Parts
 
                         Tick();
                     }
-                    Absorb(5);
                     this.growth = this.growth % stageLength;
                     tileupdate();
 
@@ -160,14 +159,16 @@ namespace XRL.World.Parts
                     Popup.Show("Things must grow in the ground.");
                     return;
                 }
-                cell.AddObject(GameObject.create(Result));
+                GameObject growInto = GameObject.create(Result);
+                cell.AddObject(growInto);
+                ParentObject.FireEvent(new Event("acegiak_SeedGrow","From",ParentObject,"To",growInto));
                 cell.RemoveObject(ParentObject);
             }
         }
 
         public void Tick(){
             if(GetPuddle() == null
-            || GetPuddle().GetPrimaryLiquid().GetKeyString() == "water"
+            || GetPuddle().GetPrimaryLiquid().GetKeyString() != "water"
             || GetPuddle().Volume <= 0
             || GetPuddle().Volume > 10){
                 health--;
@@ -206,16 +207,17 @@ namespace XRL.World.Parts
             if(GetPuddle() == null){
                 return "dry";
             }
+            if(GetPuddle().GetPrimaryLiquid().GetKeyString() != "water"){
+                return "choking on "+GetPuddle().GetPrimaryLiquid().GetKeyString();
+            }
             if(GetPuddle().Volume > 7){
                 return "drowning";
             }
             if(GetPuddle().Volume <3){
                 return "dry";
             }
-            if(GetPuddle().GetPrimaryLiquid().GetKeyString() == "water"){
-                return "thriving";
-            }
-            return "choking on "+GetPuddle().GetPrimaryLiquid().GetKeyString();
+            
+            return "thriving";
         }
 
 
@@ -280,11 +282,12 @@ namespace XRL.World.Parts
             }
             if (E.ID == "GetShortDescription" && this.stage > 0){
                 string debug = "";
-                E.SetParameter("ShortDescription", this.description
-                +GetPuddle().GetPrimaryLiquid().GetKeyString()+":"
-                +GetPuddle().ComponentLiquids[GetPuddle.bPrimary].ToString()
-                +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
-                +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString());
+                // debug += 
+                // GetPuddle().GetPrimaryLiquid().GetKeyString()+":"
+                // +GetPuddle().ComponentLiquids[GetPuddle.bPrimary].ToString()
+                // +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
+                // +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString()
+                // E.SetParameter("ShortDescription", this.description);
             }
             if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
                  if(this.stage > 0){

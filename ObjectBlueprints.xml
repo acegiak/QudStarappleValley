@@ -13,9 +13,6 @@
     <part Name="Description" Short="Mismatched stones bound into single service by callous mortar." />
   </object>
 
-
-
-
   <object Name="Large Stone" Load="Merge">
       <part Name="acegiak_Buildable"></part>
       <part Name="Stacker" />
@@ -29,7 +26,6 @@
     <object Name="Door" Load="Merge">
       <part Name="acegiak_CanBuild" Needs="Scrap Metal:5"></part>
     </object>
-
 
   <object Name="Plant" Load="Merge">
     <part Name="acegiak_SeedDropper"></part>
@@ -88,6 +84,22 @@
     <part Name="Render" DisplayName="seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
     <part Name="Description" Short="One tiny point from a glistening star."></part>
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
+  </object>
+
+
+
+  <object Name="Lead Slug" Load="Merge">
+    <part Name="acegiak_Seed" Result="Slug Tree" ResultName="slug"></part>
+  </object>
+
+  <object Name="Slug Tree" Inherits="Plant">
+    <part Name="Render" DisplayName="slug tree" ColorString="&amp;w" Tile="terrain/sw_fattree1.bmp" TileColor="&amp;w" DetailColor="y" Occluding="true"></part>
+    <part Name="Description" Short="A tangled nest of roots spill through the earth. The bark is splintered into pointy spines. The leaves are greasy and stinking."></part>
+    <tag Name="HangingSupport" />
+    <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
+    <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
+    <part Name="acegiak_SeedDropper" Chance="10" Seed="Lead Slug"></part>
+    <part Name="Harvestable" OnSuccess="LeadSlug" OnSuccessAmount="3d12" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y"></part>
   </object>
 
   

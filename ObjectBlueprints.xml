@@ -93,19 +93,16 @@
     <part Name="acegiak_Seed" Result="Slug Tree" ResultName="slug"></part>
   </object>
 
-  <object Name="Slug Tree" Inherits="Plant Turret">
+  <object Name="Slug Tree" Inherits="Plant">
     <part Name="Render" DisplayName="slug tree" ColorString="&amp;w" Tile="terrain/sw_fattree1.bmp" TileColor="&amp;w" DetailColor="y" Occluding="true"></part>
     <part Name="Description" Short="A tanlge of wiry boughs and leaden leaves, sheening in the light."></part>
     <tag Name="HangingSupport" />
     <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="acegiak_SeedDropper" Chance="10" Seed="Lead Slug"></part>
-    <part Name="Harvestable" OnSuccess="Lead Slug" OnSuccessAmount="3d12" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y"></part>
-    <part Name="Body" Builder="BodyVine" />
-    <part Name="Brain" PointBlankRange="true" />
-    <inventoryobject Blueprint="Seed Slugshot" />
+    <part Name="Harvestable" OnSuccess="Lead Slug" OnSuccessAmount="3d8" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y"></part>
   </object>
-
+<!-- 
   <object Name="Seed Slugshot" Inherits="BaseMagazineRifle">
     <part Name="Render" DisplayName="slug spitter" RenderString=")" Tile="Items/sw_wheat_stem.bmp" ColorString="&amp;w" DetailColor="y" />
     <part Name="Physics" bUsesTwoSlots="true" />
@@ -118,7 +115,7 @@
     <tag Name="Tier" Value="2" />
     <tag Name="ReloadSound" Value="SplashStep1" />
     <tag Name="MissileFireSound" Value="SeedSpit" />
-  </object>
+  </object> -->
 
 <object Name="Watering Can" Inherits="Tool">
     <part Name="Render" DisplayName="&amp;cwatering can" Tile="Tiles/sw_box.bmp" ColorString="&amp;c" DetailColor="C"></part>

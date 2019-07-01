@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "/home/acegiak/.steam/steam/steamapps/common/Caves of Qud/CoQ_Data/StreamingAssets/Base"
+		},
+		{
+			"path": "/home/acegiak/git/assembly"
 		}
 	],
 	"settings": {}

@@ -58,7 +58,6 @@ namespace XRL.World.Parts
                         }else{
                             go.GetPart<Stacker>().StackCount -= (entry.Value - bitcount);
                             bitcount += entry.Value - bitcount;
-
                         }
                     }
                 }

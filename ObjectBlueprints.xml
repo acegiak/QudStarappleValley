@@ -29,8 +29,16 @@
   
     </object>
 
+    <object Name="Metal Door" Inherits="Door">
+      <part Name="acegiak_CanBuild" Needs="Scrap Wood:5"></part>
+      <part Name="TinkerItem" Bits="www" CanDisassemble="true" CanBuild="true" CanRepair="true" />
+      <tag Name="Tier" Value="0" />
+      <part Name="Examiner" Complexity="0" AlternateDisplayName="door" />
+
+    </object>
+
     <object Name="Wood Door" Inherits="Door">
-      <part Name="acegiak_CanBuild" Needs="Scrap Metal:5"></part>
+      <part Name="acegiak_CanBuild" Needs="Scrap Wood:5"></part>
       <part Name="TinkerItem" Bits="www" CanDisassemble="true" CanBuild="true" CanRepair="true" />
       <tag Name="Tier" Value="0" />
       <part Name="Examiner" Complexity="0" AlternateDisplayName="door" />

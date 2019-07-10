@@ -9,6 +9,7 @@ using XRL.World.Parts;
 using XRL.World.Parts.Effects;
 using UnityEngine;
 using XRL.Liquids;
+using XRL.World.Tinkering;
 
 namespace XRL.World.Parts
 {
@@ -29,6 +30,18 @@ namespace XRL.World.Parts
 
 			LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidRestrainingAgent.ID), new acegiak_LiquidRestrainingAgent());
 			LiquidVolume.ComponentLiquidNameMap.Add("restrainingagent", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidRestrainingAgent.ID)]);
+
+
+			BitType item = new BitType(113, 'w', "&wwood scrap");
+			BitType.BitTypes.Add(item);
+            BitType.BitMap.Add(item.Color, item);
+            if (!BitType.LevelMap.ContainsKey(item.Level))
+            {
+                BitType.LevelMap.Add(item.Level, new List<BitType>());
+            }
+            BitType.LevelMap[item.Level].Add(item);
+            BitType.BitSortOrder.Add('w',133);
+			
         }
     }
 }

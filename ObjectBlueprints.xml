@@ -29,8 +29,11 @@
   
     </object>
 
-    <object Name="Door" Load="Merge">
+    <object Name="Wood Door" Inherits="Door">
       <part Name="acegiak_CanBuild" Needs="Scrap Metal:5"></part>
+      <part Name="TinkerItem" Bits="www" CanDisassemble="true" CanBuild="true" CanRepair="true" />
+      <tag Name="Tier" Value="0" />
+      <part Name="Examiner" Complexity="0" AlternateDisplayName="door" />
     </object>
 
   <object Name="Plant" Load="Merge">
@@ -197,6 +200,44 @@
   </object>
 
   
+  <object Name="Brinestalk Scrap" Inherits="Item">
+    <part Name="Render" DisplayName="brinestalk scrap" Tile="Items/brinestalkscrap.png" RenderString="." ColorString="&amp;w" DetailColor="g" Occluding="false"></part>
+    <part Name="Physics" Weight="1" Takeable="true" Solid="false"></part>
+    <part Name="Description" Short="A sturdy scrap of brinestalk."></part>
+    <part Name="acegiak_Buildable"></part>
+    <part Name="Stacker" />
+  </object>
+
+  
+  <object Name="Wood Scrap" Inherits="Item">
+    <part Name="Render" DisplayName="wood scrap" Tile="Items/woodscrap.png" RenderString="." ColorString="&amp;w" DetailColor="r" Occluding="false"></part>
+    <part Name="Physics" Weight="1" Takeable="true" Solid="false"></part>
+    <part Name="Description" Short="A sturdy scrap of wood."></part>
+    <part Name="acegiak_Buildable"></part>
+    <part Name="TinkerItem" Bits="w"></part>
+    <part Name="Stacker" />
+  </object>
+
+  <object Name="Brinestalk" Load="Merge">
+    <part Name="Corpse" CorpseChance="35" CorpseBlueprint="Brinestalk Scrap" BodyDrop="false" InventoryDrop="true" />
+  </object>
+
+  <object Name="BrinestalkStakes" Load="Merge">
+    <part Name="acegiak_CanBuild" Needs="Brinestalk Scrap:5"/>
+  </object>
+
+  <object Name="Wooden Buckler" Load="Merge">
+    <part Name="Corpse" CorpseChance="35" CorpseBlueprint="Wood Scrap" BodyDrop="false" InventoryDrop="true" />
+  </object>
+  <object Name="Club" Load="Merge">
+    <part Name="Corpse" CorpseChance="35" CorpseBlueprint="Wood Scrap" BodyDrop="false" InventoryDrop="true" />
+  </object>
+  <object Name="Walking Stick" Load="Merge">
+    <part Name="Corpse" CorpseChance="35" CorpseBlueprint="Wood Scrap" BodyDrop="false" InventoryDrop="true" />
+  </object>
+  <object Name="Dogthorn Tree" Load="Merge">
+    <part Name="Corpse" CorpseChance="35" CorpseBlueprint="Wood Scrap" BodyDrop="false" InventoryDrop="true" />
+  </object>
 
   
   </objects>

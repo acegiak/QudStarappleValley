@@ -45,24 +45,40 @@ namespace XRL.World.Parts
 
 
         public void Water(){
-            IPart.AddPlayerMessage("startwater");
+            //IPart.AddPlayerMessage("startwater");
             string text = PickDirectionS();
             if (!string.IsNullOrEmpty(text))
             {
-            IPart.AddPlayerMessage("gotdir");
+            //IPart.AddPlayerMessage("gotdir");
                 Cell cellFromDirection = ParentObject.Equipped.pPhysics.CurrentCell.GetCellFromDirection(text);
                 if (cellFromDirection != null)
                 {
-                    IPart.AddPlayerMessage("gotcell");
+                    //IPart.AddPlayerMessage("gotcell");
                     LiquidVolume volume = ParentObject.GetPart<LiquidVolume>();
                     if(volume == null || volume.Volume <= 0){
                         Popup.Show(ParentObject.The+ParentObject.DisplayNameOnly+" doesn't contain any liquid.");
                         return;
                     }
-                    IPart.AddPlayerMessage("pour");
+                    //IPart.AddPlayerMessage("pour");
                     volume.PourIntoCell(ParentObject, cellFromDirection,1);
+                    CellSplash(cellFromDirection);
                 }
             }
+        }
+
+        public void CellSplash(Cell cell){
+            if ( cell.ParentZone == XRLCore.Core.Game.ZoneManager.ActiveZone)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					float num = 0f;
+					float num2 = 0f;
+					float num3 = (float)XRL.Rules.Stat.RandomCosmetic(0, 359) / 58f;
+					num = (float)Math.Sin(num3) / 3f;
+					num2 = (float)Math.Cos(num3) / 3f;
+					XRLCore.ParticleManager.Add(ConsoleLib.Console.ColorUtility.StripBackgroundFormatting(ParentObject.pRender.ColorString + "."), cell.X, cell.Y, num, num2, 5, 0f, 0f);
+				}
+			}
         }
 		public override bool FireEvent(Event E)
 		{

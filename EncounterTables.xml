@@ -4,6 +4,53 @@
     <objects>
     <object Chance="15" Number="1d1" Blueprint="Watering Can"></object>
     </objects>
+    
+  </encountertable>
+
+
+
+  <encountertable Name="Agriculture Phials" Density="minimum">
+    <objects>
+    <object Chance="10" Number="1d3" Blueprint="Growth Agent Phial"></object>
+    <object Chance="10" Number="1d3" Blueprint="Restraiing Agent Phial"></object>
+    <object Chance="10" Number="1d3" Blueprint="Furling Agent Phial"></object>
+    </objects>
+  </encountertable>
+
+    <encountertable Name="Utility 3" Load="Merge">
+    <objects>
+          <tableobject Chance="1" Table="Agriculture Phials"></tableobject>
+    </objects>    
+  </encountertable>
+  
+    <encountertable Name="Utility 4" Load="Merge">
+    <objects>
+          <tableobject Chance="1" Table="Agriculture Phials"></tableobject>
+    </objects>    
+  </encountertable>
+  
+    <encountertable Name="Utility 5" Load="Merge">
+    <objects>
+          <tableobject Chance="1" Table="Agriculture Phials"></tableobject>
+    </objects>    
+  </encountertable>
+  
+    <encountertable Name="Utility 6" Load="Merge">
+    <objects>
+          <tableobject Chance="1" Table="Agriculture Phials"></tableobject>
+    </objects>    
+  </encountertable>
+  
+    <encountertable Name="Utility 7" Load="Merge">
+    <objects>
+          <tableobject Chance="1" Table="Agriculture Phials"></tableobject>
+    </objects>    
+  </encountertable>
+  
+    <encountertable Name="Utility 8" Load="Merge">
+    <objects>
+          <tableobject Chance="1" Table="Agriculture Phials"></tableobject>
+    </objects>    
   </encountertable>
 
   </encountertables>

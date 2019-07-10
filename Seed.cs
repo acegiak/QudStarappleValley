@@ -60,6 +60,7 @@ namespace XRL.World.Parts
             Object.RegisterPartEvent(this, "GetDisplayName");
             Object.RegisterPartEvent(this, "GetShortDisplayName");
             Object.RegisterPartEvent(this, "GetShortDescription");
+            Object.RegisterPartEvent(this, "AccelerateRipening");
 			base.Register(Object);
 		}
 
@@ -112,17 +113,6 @@ namespace XRL.World.Parts
 
 
 
-        public void Absorb(int drams){
-            Cell cell = ParentObject.CurrentCell;
-            foreach(GameObject GO in cell.GetObjects()){
-                LiquidVolume volume = GO.GetPart<LiquidVolume>();
-                if(volume != null){
-                    volume.UseDrams(drams);
-                }
-            }
-        }
-
-
         public void Ticks(){
             if(stage < 1){
                 return;
@@ -160,6 +150,33 @@ namespace XRL.World.Parts
                     return;
                 }
                 GameObject growInto = GameObject.create(Result);
+
+
+
+                if(GetPuddle() != null){
+                    if(GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidRestrainingAgent.ID))){
+                       growInto.pPhysics.Takeable = true;
+                       growInto.pPhysics.Weight = growInto.pPhysics.Weight /10;
+                       growInto.pRender.DisplayName += " bonsai";
+                    }
+                }
+
+                if(GetPuddle() != null){
+                    if(GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidFurlingAgent.ID))){
+                        GameObject furled = GameObject.create("FurledPlant");
+                        furled.GetPart<Render>().DisplayName = "Furled "+growInto.DisplayNameOnly;
+                        furled.GetPart<Render>().DetailColor = ParentObject.pRender.DetailColor;
+                        furled.GetPart<Render>().TileColor = ParentObject.pRender.TileColor;
+                        furled.GetPart<Render>().RenderString = ParentObject.pRender.RenderString;
+                        furled.GetPart<Render>().ColorString = ParentObject.pRender.ColorString;
+                        furled.GetPart<DeploymentGrenade>().Blueprint = growInto.Blueprint;
+                        growInto = furled;
+                    }
+                }
+
+                
+
+
                 cell.AddObject(growInto);
                 ParentObject.FireEvent(new Event("acegiak_SeedGrow","From",ParentObject,"To",growInto));
                 cell.RemoveObject(ParentObject);
@@ -174,6 +191,13 @@ namespace XRL.World.Parts
                 health--;
             }else{
                 health++;
+                if(GetPuddle() != null
+                && GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidGrowthAgent.ID))
+                && GetPuddle().ComponentLiquids[Convert.ToByte(acegiak_LiquidGrowthAgent.ID)]>0){
+                    health+= 4;
+                    GetPuddle().ComponentLiquids[Convert.ToByte(acegiak_LiquidGrowthAgent.ID)] -= 1;
+                }
+
             }
             if(health >= 5){
                 health = 0;
@@ -277,7 +301,7 @@ namespace XRL.World.Parts
             //         }
             //     }
             // }
-            if (E.ID == "EndTurn"){
+            if (E.ID == "EndTurn" || E.ID == "AccelerateRipening"){
                 Ticks();
             }
             if (E.ID == "GetShortDescription" && this.stage > 0){

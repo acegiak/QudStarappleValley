@@ -1,4 +1,10 @@
 <objects>
+  <object Name="DoNotUse_LiquidTestObjectInitializer" Inherits="Item">
+    <part Name="Render" DisplayName="[Dummy item for Liquid Test]" />
+    <part Name="acegiak_AgriculturalLiquidInitializer" />
+    <tag Name="ExcludeFromDynamicEncounters" />
+</object>
+
 <object Name="Rubble" Load="Merge">
     <part Name="acegiak_Buildable"></part>
     <part Name="acegiak_CanBuild" Needs="Large Stone:10"/>
@@ -77,12 +83,18 @@
         <part Name="acegiak_Seed" Result="Dreadroot" ResultName="dreadroot"></part>
   </object>
 
+  <object Name="Starapple Tree" Load="Merge">
+      <part Name="Harvestable" RegenTime="500"></part>
+  </object>
 
+  <object Name="Witchwood Tree" Load="Merge">
+      <part Name="Harvestable" RegenTime="500"></part>
+  </object>
 
   <object Name="Seed"  Inherits="Item">
-    <part Name="Physics" Weight="0" Takeable="true" Solid="false"></part>
+    <part Name="Physics" Weight="0" Takeable="true" Solid="false" Category="Seeds"></part>
     <part Name="Render" DisplayName="seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
-    <part Name="Description" Short="One tiny point from a glistening star."></part>
+    <part Name="Description" Short="The hope of new life."></part>
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
     <part Name="Stacker" />
   </object>
@@ -95,12 +107,12 @@
 
   <object Name="Slug Tree" Inherits="Plant">
     <part Name="Render" DisplayName="slug tree" ColorString="&amp;w" Tile="terrain/sw_fattree1.bmp" TileColor="&amp;w" DetailColor="y" Occluding="true"></part>
-    <part Name="Description" Short="A tanlge of wiry boughs and leaden leaves, sheening in the light."></part>
+    <part Name="Description" Short="A tangle of wiry boughs and leaden leaves, sheening in the light."></part>
     <tag Name="HangingSupport" />
     <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="acegiak_SeedDropper" Chance="10" Seed="Lead Slug"></part>
-    <part Name="Harvestable" OnSuccess="Lead Slug" OnSuccessAmount="3d8" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y"></part>
+    <part Name="Harvestable" OnSuccess="Lead Slug" OnSuccessAmount="3d8" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="500"></part>
   </object>
 <!-- 
   <object Name="Seed Slugshot" Inherits="BaseMagazineRifle">
@@ -125,5 +137,66 @@
     <part Name="acegiak_Watering"></part>
 
   </object>
+
+  <object Name="Gourd Vine" Inherits="Plant">
+    <part Name="Render" DisplayName="gourd vine" Tile="Assets_Content_Textures_Tiles_sw_watervine1.bmp" ColorString="&amp;w" DetailColor="R"></part>
+    <part Name="Description" Short="A tanlge of wiry boughs and leaden leaves, sheening in the light."></part>
+    <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
+    <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
+    <part Name="Harvestable" OnSuccess="Fresh Gourd" OnSuccessAmount="1d2" StartRipeChance="1:5" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="R" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="500"></part>
+  </object>
+
+  <object Name="Gourd" Inherits="WaterContainer">
+    <part Name="Render" DisplayName="&amp;Wgo&amp;Ru&amp;Wrd" ColorString="&amp;W" DetailColor="R" Tile="Items/sw_canteen.png"></part>
+    <part Name="Description" Short="Dried and hollowed out. Nature's canteen."></part>
+    <part Name="LiquidVolume" MaxVolume="32" Volume="32" StartVolume="1d3-1" InitialLiquid="water-1000" ManualSeal="true" />
+    <intproperty Name="Inorganic" Value="0" />
+  </object>
+
+  <object Name="Fresh Gourd" Inherits="Snack">
+    <part Name="Render" DisplayName="&amp;Gfresh &amp;wgo&amp;Gu&amp;wrd" ColorString="&amp;w" DetailColor="G" Tile="Items/sw_canteen.png"></part>
+    <part Name="Commerce" Value="0.1"></part>
+    <part Name="Food" Satiation="Snack" Thirst="1500"></part>
+    <part Name="Description" Short="A fresh green gourd."></part>
+    <part Name="Physics" Weight="1"></part>
+    <part Name="PreservableItem" Result="Gourd" Number="1"></part>
+    <part Name="PreparedCookingIngredient" type="selfPoison" charges="1"></part>
+    <tag Name="ChooseToPreserve"></tag>
+  </object>
+
+  
+  <object Name="Growth Agent Phial" Inherits="Phial">
+    <part Name="LiquidVolume" StartVolume="1" InitialLiquid="growthagent-1000" />
+  </object>
+  <object Name="Furling Agent Phial" Inherits="Phial">
+    <part Name="LiquidVolume" StartVolume="1" InitialLiquid="furlingagent-1000" />
+  </object>
+  <object Name="Restraining Agent Phial" Inherits="Phial">
+    <part Name="LiquidVolume" StartVolume="1" InitialLiquid="restrainingagent-1000" />
+  </object>
+  
+  <object Name="Growth Agent Pool" Inherits="Water">
+    <part Name="acegiak_AgriculturalLiquidVolume" MaxVolume="-1" Volume="100" InitialLiquid="growthagent-1000"></part>
+  </object>
+  <object Name="Furling Agent Pool" Inherits="Water">
+    <part Name="acegiak_AgriculturalLiquidVolume" MaxVolume="-1" Volume="100" InitialLiquid="furlingagent-1000"></part>
+  </object>
+  <object Name="Restraining Agent Pool" Inherits="Water">
+    <part Name="acegiak_AgriculturalLiquidVolume" MaxVolume="-1" Volume="100" InitialLiquid="furlingagent-1000"></part>
+  </object>
+  
+
+
+
+  <object Name="FurledPlant" Inherits="Grenade">
+    <part Name="Physics" Weight="0" Takeable="true" Solid="false" Category="Seeds"></part>
+    <part Name="Render" DisplayName="seed"  Tile="Items/sw_grenade.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
+    <part Name="Description" Short="A tightly furled bundle of sprigs and leaves."></part>
+    <part Name="DeploymentGrenade" Blueprint="Starapple" Radius="0"  ActivationVerb="detonate" BlockedBySolid="true" BlockedByNonEmpty="false" DustPuff="false" DustPuffEach="false" />
+    <part Name="Stacker" />
+  </object>
+
+  
+
   
   </objects>

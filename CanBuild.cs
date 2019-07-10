@@ -48,18 +48,17 @@ namespace XRL.World.Parts
                 List<GameObject> bits = cell.GetObjects(entry.Key);
                 int bitcount = 0;
                 foreach(GameObject go in bits){
-                    bitcount+= go.Count;
-                    if(bitcount < entry.Value){
+                    if(go.GetPart<Stacker>() == null){
                         cell.RemoveObject(go);
-                    }
-                    if(bitcount + go.Count > entry.Value){
-                        int amount = (bitcount+go.Count)-entry.Value;
-                        Event @event = Event.New("SplitStack", "Number", amount);
-                        @event.AddParameter("OwningObject", XRLCore.Core.Game.Player.Body);
-                        go.FireEvent(@event);
-                        cell.RemoveObject(go);
-
-                        break;
+                        bitcount++;
+                    }else{
+                        if(bitcount+go.Count <= entry.Value){
+                            bitcount+= go.Count;
+                            cell.RemoveObject(go);
+                        }else{
+                            go.GetPart<Stacker>().StackCount -= (entry.Value - bitcount);
+                            bitcount += entry.Value - bitcount;
+                        }
                     }
                 }
             }
@@ -68,10 +67,5 @@ namespace XRL.World.Parts
             return true;
         }
 
-	
-
-	
-
-      
 	}
 }

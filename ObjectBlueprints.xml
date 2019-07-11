@@ -15,8 +15,6 @@
   </object>
 
 
-
-
   <object Name="Starapple" Load="Merge">
     <part Name="Corpse" CorpseChance="100" CorpseBlueprint="Starapple Seed" BodyDrop="false" InventoryDrop="true" />
   </object>

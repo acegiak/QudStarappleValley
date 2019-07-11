@@ -32,15 +32,15 @@ namespace XRL.World.Parts
 			LiquidVolume.ComponentLiquidNameMap.Add("restrainingagent", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidRestrainingAgent.ID)]);
 
 
-			BitType item = new BitType(113, 'w', "&wwood scrap");
-			BitType.BitTypes.Add(item);
-            BitType.BitMap.Add(item.Color, item);
-            if (!BitType.LevelMap.ContainsKey(item.Level))
-            {
-                BitType.LevelMap.Add(item.Level, new List<BitType>());
-            }
-            BitType.LevelMap[item.Level].Add(item);
-            BitType.BitSortOrder.Add('w',133);
+			// BitType item = new BitType(113, 'w', "&wwood scrap");
+			// BitType.BitTypes.Add(item);
+            // BitType.BitMap.Add(item.Color, item);
+            // if (!BitType.LevelMap.ContainsKey(item.Level))
+            // {
+            //     BitType.LevelMap.Add(item.Level, new List<BitType>());
+            // }
+            // BitType.LevelMap[item.Level].Add(item);
+            // BitType.BitSortOrder.Add('w',133);
 			
         }
     }

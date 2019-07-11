@@ -128,23 +128,22 @@
   
   <object Name="Growth Agent Phial" Inherits="Phial">
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="growthagent-1000" />
+      <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
   </object>
   <object Name="Furling Agent Phial" Inherits="Phial">
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="furlingagent-1000" />
+      <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
   </object>
   <object Name="Restraining Agent Phial" Inherits="Phial">
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="restrainingagent-1000" />
+      <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
+  </object>
+  <object Name="Soothing Agent Phial" Inherits="Phial">
+    <part Name="LiquidVolume" StartVolume="1" InitialLiquid="soothingagent-1000" />
+    <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
+
   </object>
   
-  <object Name="Growth Agent Pool" Inherits="Water">
-    <part Name="acegiak_AgriculturalLiquidVolume" MaxVolume="-1" Volume="100" InitialLiquid="growthagent-1000"></part>
-  </object>
-  <object Name="Furling Agent Pool" Inherits="Water">
-    <part Name="acegiak_AgriculturalLiquidVolume" MaxVolume="-1" Volume="100" InitialLiquid="furlingagent-1000"></part>
-  </object>
-  <object Name="Restraining Agent Pool" Inherits="Water">
-    <part Name="acegiak_AgriculturalLiquidVolume" MaxVolume="-1" Volume="100" InitialLiquid="furlingagent-1000"></part>
-  </object>
   
 
 

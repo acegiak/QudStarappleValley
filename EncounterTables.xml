@@ -14,6 +14,7 @@
     <object Chance="10" Number="1d3" Blueprint="Growth Agent Phial"></object>
     <object Chance="10" Number="1d3" Blueprint="Restraiing Agent Phial"></object>
     <object Chance="10" Number="1d3" Blueprint="Furling Agent Phial"></object>
+    <object Chance="10" Number="1d3" Blueprint="Soothing Agent Phial"></object>
     </objects>
   </encountertable>
 

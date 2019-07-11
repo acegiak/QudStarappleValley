@@ -32,6 +32,10 @@ namespace XRL.World.Parts
 			LiquidVolume.ComponentLiquidNameMap.Add("restrainingagent", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidRestrainingAgent.ID)]);
 
 
+			LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidSoothingAgent.ID), new acegiak_LiquidSoothingAgent());
+			LiquidVolume.ComponentLiquidNameMap.Add("soothingagent", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidSoothingAgent.ID)]);
+
+
 			// BitType item = new BitType(113, 'w', "&wwood scrap");
 			// BitType.BitTypes.Add(item);
             // BitType.BitMap.Add(item.Color, item);

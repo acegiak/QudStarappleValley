@@ -150,7 +150,7 @@ namespace XRL.Liquids
 			{
 				return;
 			}
-			int num = 10 + (int)((double)(Liquid.ComponentLiquids[5] * 5) / 1000.0);
+			int num = 10 + (int)((double)(Liquid.ComponentLiquids[Convert.ToByte(ID)] * 5) / 1000.0);
 			if (!GO.MakeSave("Agility,Toughness", num - GO.GetIntProperty("Stable"), null, null, "Unwanted Growth"))
 			{
 

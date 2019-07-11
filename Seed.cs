@@ -177,9 +177,34 @@ namespace XRL.World.Parts
                 
 
 
+
+                if(GetPuddle() != null){
+                    if(GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidSoothingAgent.ID))){
+                        if(growInto.GetPart<Brain>() != null){
+                            growInto.GetPart<Brain>().PerformReequip();
+                            growInto.GetPart<Brain>().BecomeCompanionOf(growInto.ThePlayer);
+                            growInto.GetPart<Brain>().IsLedBy(growInto.ThePlayer);
+                            growInto.GetPart<Brain>().SetFeeling(growInto.ThePlayer,100);
+                            growInto.GetPart<Brain>().Goals.Clear();
+                            growInto.GetPart<Brain>().Calm = false;
+                            growInto.GetPart<Brain>().Hibernating = false;
+                            growInto.GetPart<Brain>().FactionMembership.Clear();
+                            growInto.AddPart(new Combat());
+                        }
+                    }
+                }
+
+                if(growInto.GetPart<Brain>() != null){
+                            XRLCore.Core.Game.ActionManager.AddActiveObject(growInto);
+                }
+
+
                 cell.AddObject(growInto);
+
+
                 ParentObject.FireEvent(new Event("acegiak_SeedGrow","From",ParentObject,"To",growInto));
                 cell.RemoveObject(ParentObject);
+                ParentObject.Destroy(true);
             }
         }
 

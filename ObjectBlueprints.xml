@@ -141,13 +141,8 @@
   <object Name="Soothing Agent Phial" Inherits="Phial">
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="soothingagent-1000" />
     <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
-
   </object>
   
-  
-
-
-
   <object Name="FurledPlant" Inherits="Grenade">
     <part Name="Physics" Weight="0" Takeable="true" Solid="false" Category="Seeds"></part>
     <part Name="Render" DisplayName="seed"  Tile="Items/sw_grenade.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
@@ -156,7 +151,4 @@
     <part Name="Stacker" />
   </object>
 
-
-
-  
   </objects>

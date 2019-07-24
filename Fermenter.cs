@@ -141,7 +141,7 @@ namespace XRL.World.Parts
 
             }
         }
-]
+
 
         
 		public override bool FireEvent(Event E)

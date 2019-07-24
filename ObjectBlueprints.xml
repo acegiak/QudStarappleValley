@@ -151,4 +151,8 @@
     <part Name="Stacker" />
   </object>
 
+  <object Name="Barrel" Inherits="Furniture">
+    <part Name="LiquidVolume" MaxVolume="1000" Volume="1000" StartVolume="1d100" InitialLiquid="wine-1000" ManualSeal="true" />
+  </object>
+
   </objects>

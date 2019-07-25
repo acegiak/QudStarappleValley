@@ -155,7 +155,7 @@
     <part Name="Render" DisplayName="barrel"  Tile="Items/barrel.png" RenderString="." ColorString="&amp;w" DetailColor="W" Occluding="false"></part>
     <part Name="LiquidVolume" MaxVolume="1000" Volume="1000" StartVolume="3d12" InitialLiquid="wine-1000" ManualSeal="true" />
     <part Name="Description" Short="A brass bound barrel seeded with fermenting promises."></part>
-
+    <tag Name="acegiak_Buildable" Value="Scrap Wood:5;Scrap Metal:1"/>
     <part Name="acegiak_Fermenter"/>
   </object>
 

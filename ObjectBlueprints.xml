@@ -151,8 +151,37 @@
     <part Name="Stacker" />
   </object>
 
-  <object Name="Barrel" Inherits="Furniture">
-    <part Name="LiquidVolume" MaxVolume="1000" Volume="1000" StartVolume="1d100" InitialLiquid="wine-1000" ManualSeal="true" />
+  <object Name="Fermenting Barrel" Inherits="Chest">
+    <part Name="Render" DisplayName="barrel"  Tile="Items/barrel.png" RenderString="." ColorString="&amp;w" DetailColor="W" Occluding="false"></part>
+    <part Name="LiquidVolume" MaxVolume="1000" Volume="1000" StartVolume="3d12" InitialLiquid="wine-1000" ManualSeal="true" />
+    <part Name="Description" Short="A brass bound barrel seeded with fermenting promises."></part>
+
+    <part Name="acegiak_Fermenter"/>
   </object>
+
+  <object Name="Yuckwheat Stem" Load="Merge">
+    <tag Name="FermentTo" Value="beer"/>
+  </object>
+  <object Name="Starapple" Load="Merge">
+    <tag Name="FermentTo" Value="cider"/>
+  </object>
+  <object Name="Spine Fruit" Load="Merge">
+    <tag Name="FermentTo" Value="wine"/>
+  </object>
+  <object Name="HoneyPool" Load="Merge">
+    <tag Name="FermentTo" Value="mead"/>
+  </object>
+  <object Name="BeerPool" Inherits="Water">
+    <part Name="LiquidVolume" MaxVolume="-1" Volume="10" StartVolume="10d10" InitialLiquid="beer-1000"></part>
+  </object>
+  <object Name="MeadPool" Inherits="Water">
+    <part Name="LiquidVolume" MaxVolume="-1" Volume="10" StartVolume="10d10" InitialLiquid="mead-1000"></part>
+  </object>
+  <!-- <object Name="GrapeJuicePool" Inherits="Water">
+    <part Name="LiquidVolume" MaxVolume="-1" Volume="10" StartVolume="10d10" InitialLiquid="grapejuice-1000"></part>
+  </object>
+  <object Name="AppleJuicePool" Inherits="Water">
+    <part Name="LiquidVolume" MaxVolume="-1" Volume="10" StartVolume="10d10" InitialLiquid="applejuice-1000"></part>
+  </object> -->
 
   </objects>

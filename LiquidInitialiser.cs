@@ -36,6 +36,22 @@ namespace XRL.World.Parts
 			LiquidVolume.ComponentLiquidNameMap.Add("soothingagent", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidSoothingAgent.ID)]);
 
 
+			LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidBeer.ID), new acegiak_LiquidBeer());
+			LiquidVolume.ComponentLiquidNameMap.Add("beer", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidBeer.ID)]);
+
+			LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidMead.ID), new acegiak_LiquidMead());
+			LiquidVolume.ComponentLiquidNameMap.Add("mead", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidMead.ID)]);
+
+
+			// LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidGrapeJuice.ID), new acegiak_LiquidGrapeJuice());
+			// LiquidVolume.ComponentLiquidNameMap.Add("grapejuice", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidGrapeJuice.ID)]);
+
+
+			// LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidAppleJuice.ID), new acegiak_LiquidAppleJuice());
+			// LiquidVolume.ComponentLiquidNameMap.Add("applejuice", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidAppleJuice.ID)]);
+
+
+
 			// BitType item = new BitType(113, 'w', "&wwood scrap");
 			// BitType.BitTypes.Add(item);
             // BitType.BitMap.Add(item.Color, item);

@@ -3,6 +3,7 @@
   <encountertable Name="Utility 2" Load="Merge">
     <objects>
     <object Chance="15" Number="1d1" Blueprint="Watering Can"></object>
+    <object Chance="15" Number="1d1" Blueprint="Fermenting Barrel"></object>
     </objects>
     
   </encountertable>

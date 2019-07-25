@@ -10,9 +10,9 @@ using XRL.World.Parts.Effects;
 namespace XRL.Liquids
 {
 	[Serializable]
-	internal class LiquidMead : BaseLiquid
+	internal class acegiak_LiquidMead : BaseLiquid
 	{
-		public new const int ID = 15;
+		public new const int ID = 136;
 
 		public new const string Name = "mead";
 
@@ -23,8 +23,8 @@ namespace XRL.Liquids
 			"W"
 		};
 
-		public LiquidMead()
-			: base(15, "mead", 350, 2000, 1.1f)
+		public acegiak_LiquidMead()
+			: base(Convert.ToByte(ID), "mead", 350, 2000, 1.1f)
 		{
 		}
 
@@ -53,10 +53,7 @@ namespace XRL.Liquids
 			return "&Wsticky";
 		}
 
-		public override string GetPreparedCookingIngredient()
-		{
-			return "quicknessMinor";
-		}
+
 
 		public override bool Drank(LiquidVolume Liquid, int Volume, GameObject Target, StringBuilder Message, ref bool ExitInterface)
 		{

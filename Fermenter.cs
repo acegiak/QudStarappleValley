@@ -104,7 +104,7 @@ namespace XRL.World.Parts
             if(this.growth >=stageLength){
             
                 for(int i = 0; i < growth/stageLength;i++){
-                    IPart.AddPlayerMessage("TICKS!");
+                    //IPart.AddPlayerMessage("TICKS!");
 
                     Tick();
                 }
@@ -115,17 +115,17 @@ namespace XRL.World.Parts
 
         public void Tick(){
 
-            IPart.AddPlayerMessage("do tick!");
+            //IPart.AddPlayerMessage("do tick!");
             GetFerments();
             LiquidVolume volume = ParentObject.GetPart<LiquidVolume>();
             if(volume == null){
-                IPart.AddPlayerMessage("no volume!");
+                //IPart.AddPlayerMessage("no volume!");
 
                 return;
             }
 
             if(ParentObject.pPhysics.Temperature <15){
-                IPart.AddPlayerMessage("cold!");
+                //IPart.AddPlayerMessage("cold!");
                 return;
             }
             int bads = 0;
@@ -137,9 +137,9 @@ namespace XRL.World.Parts
             int adram = (int)Math.Ceiling(1000f/Math.Max(volume.Volume,1));
 
 
-            IPart.AddPlayerMessage("Amounts:");
+            //IPart.AddPlayerMessage("Amounts:");
             foreach(byte id in volume._ComponentLiquids.Keys.ToList()){
-                IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+": "+volume._ComponentLiquids[id].ToString());
+                //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+": "+volume._ComponentLiquids[id].ToString());
             }
 
 
@@ -156,7 +156,7 @@ namespace XRL.World.Parts
 
             if(ParentObject.pPhysics.Temperature > 30f  || Stat.Rnd2.NextDouble() < bads/total){
 
-                IPart.AddPlayerMessage("putrid!");
+                //IPart.AddPlayerMessage("putrid!");
                 byte result = LiquidVolume.GetLiquidId("putrid");
                 if(volume.GetPrimaryLiquid() != null){
                     volume._ComponentLiquids[Convert.ToByte(volume.GetPrimaryLiquid().ID)] -= adram;
@@ -164,15 +164,15 @@ namespace XRL.World.Parts
                 volume._ComponentLiquids[result] += adram;
                 
             }else{
-                IPart.AddPlayerMessage("test contents!");
+                //IPart.AddPlayerMessage("test contents!");
                 foreach(byte id in volume._ComponentLiquids.Keys.ToList()){
-                    IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" test?");
+                    //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" test?");
                     if(ferments.ContainsKey(LiquidVolume.ComponentLiquidTypes[id].Name)){
 
                         byte result = ferments[LiquidVolume.ComponentLiquidTypes[id].Name];
 
 
-                        IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" ferments to "+LiquidVolume.ComponentLiquidTypes[result].Name+"!");
+                        //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" ferments to "+LiquidVolume.ComponentLiquidTypes[result].Name+"!");
 
                         volume._ComponentLiquids[id] = volume._ComponentLiquids[id] - adram;
 
@@ -202,20 +202,20 @@ namespace XRL.World.Parts
                 List<string> seen = new List<string>();
 
                 foreach(GameObject GO in ParentObject.GetPart<Inventory>().GetObjects()){
-                    IPart.AddPlayerMessage(GO.DisplayName+" test?");
+                    //IPart.AddPlayerMessage(GO.DisplayName+" test?");
 
                     if(GO.HasTag("FermentTo")){
                         string result = GO.GetTag("FermentTo");
 
-                        IPart.AddPlayerMessage(GO.GetBlueprint().Name+" ferments to: "+result+"!");
+                        //IPart.AddPlayerMessage(GO.GetBlueprint().Name+" ferments to: "+result+"!");
                         if(!seen.Contains(GO.GetBlueprint().Name)){
-                            IPart.AddPlayerMessage("not seen!");
+                            //IPart.AddPlayerMessage("not seen!");
                             if(GO.Count > 1){
                                 GO.RemoveOne();
-                                IPart.AddPlayerMessage("removeone!");
+                                //IPart.AddPlayerMessage("removeone!");
                             }else{
                                 GO.Destroy();
-                                IPart.AddPlayerMessage("destroyed!");
+                                //IPart.AddPlayerMessage("destroyed!");
                             }
                             seen.Add(GO.GetBlueprint().Name);
 
@@ -244,9 +244,9 @@ namespace XRL.World.Parts
             volume.FlushWeightCaches();
 
 
-            IPart.AddPlayerMessage("New Amounts:");
+            //IPart.AddPlayerMessage("New Amounts:");
             foreach(byte id in volume._ComponentLiquids.Keys.ToList()){
-                IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+": "+volume._ComponentLiquids[id].ToString());
+                //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+": "+volume._ComponentLiquids[id].ToString());
             }
        
         }
@@ -266,7 +266,7 @@ namespace XRL.World.Parts
                         BaseLiquid L = LiquidVolume.ComponentLiquidNameMap[liquidbits[0]];
                         BaseLiquid F = LiquidVolume.ComponentLiquidNameMap[bp.GetTag("FermentTo")];
                         ferments[L.Name] = Convert.ToByte(F.ID);
-                        IPart.AddPlayerMessage(L.Name+" can ferment to:"+F.Name+"!");
+                        //IPart.AddPlayerMessage(L.Name+" can ferment to:"+F.Name+"!");
 
 
                     }
@@ -275,7 +275,7 @@ namespace XRL.World.Parts
                         BaseLiquid F = LiquidVolume.ComponentLiquidNameMap[bp.GetTag("FermentTo")];
                         ferments[bp.Name] = Convert.ToByte(F.ID);
 
-                        IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.Name+"!");
+                        //IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.Name+"!");
                     }
                 }
                 

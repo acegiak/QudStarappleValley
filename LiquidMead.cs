@@ -54,6 +54,10 @@ namespace XRL.Liquids
 		}
 
 
+		public override string GetPreparedCookingIngredient()
+		{
+			return "willpower";
+		}
 
 		public override bool Drank(LiquidVolume Liquid, int Volume, GameObject Target, StringBuilder Message, ref bool ExitInterface)
 		{

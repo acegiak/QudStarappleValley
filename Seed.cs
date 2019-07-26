@@ -6,6 +6,7 @@ using XRL.World.Parts.Effects;
 using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
+using XRL.World.Parts.Mutation;
 
 namespace XRL.World.Parts
 {
@@ -24,6 +25,7 @@ namespace XRL.World.Parts
         public long lastseen = 0;
 
         public int stageLength = 200;
+        public int drowamount = 15;
 
         public bool Dead = false;
 
@@ -79,6 +81,8 @@ namespace XRL.World.Parts
             }
 
             ParentObject.pPhysics.Takeable = false;
+
+            LengthMultiplier();
             this.stage = 1;
             //ParentObject.pPhysics.Category = "Plant";
             //ParentObject.RemovePart<NoEffects>();
@@ -109,6 +113,26 @@ namespace XRL.World.Parts
             return null;
         }
 
+        public void LengthMultiplier(){
+            GameObject GO = GameObjectFactory.Factory.CreateSampleObject(this.Result);
+            int multiplier = 1;
+            if(GO.GetPart<Brain>() != null){
+                multiplier++;
+            }
+            if(GO.GetPart<Body>() != null){
+                multiplier++;
+            }
+            if(GO.GetPart<LiquidFont>() != null){
+                multiplier += 2;
+            }
+            if(GO.GetPart<Harvestable>() != null){
+                multiplier++;
+            }
+            if(GO.GetPart<SporePuffer>() != null){
+                multiplier++;
+            }
+            this.stageLength = this.stageLength*multiplier;
+        }
 
 
 
@@ -212,7 +236,7 @@ namespace XRL.World.Parts
             if(GetPuddle() == null
             || GetPuddle().GetPrimaryLiquid().GetKeyString() != "water"
             || GetPuddle().Volume <= 0
-            || GetPuddle().Volume > 10){
+            || GetPuddle().Volume > drowamount){
                 health--;
             }else{
                 health++;
@@ -259,7 +283,7 @@ namespace XRL.World.Parts
             if(GetPuddle().GetPrimaryLiquid().GetKeyString() != "water"){
                 return "choking on "+GetPuddle().GetPrimaryLiquid().GetKeyString();
             }
-            if(GetPuddle().Volume > 7){
+            if(GetPuddle().Volume > drowamount){
                 return "drowning";
             }
             if(GetPuddle().Volume <3){

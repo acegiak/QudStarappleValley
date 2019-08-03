@@ -39,9 +39,15 @@ namespace XRL.World.Parts
 		public acegiak_Seed()
 		{
 		}
+        
 		public override bool SameAs(IPart p)
 		{
-            
+            if(p is acegiak_Seed){
+                acegiak_Seed s = p as acegiak_Seed;
+                if(s.Result == this.Result && s.ResultName == this.ResultName && s.growth == this.growth && s.stage == this.stage){
+                    return true;
+                }
+            }
 			return false;
 		}
 

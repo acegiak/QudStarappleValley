@@ -20,22 +20,6 @@
   </object>
 
 
-    <object Name="Starapple Seed"  Inherits="Item">
-        <part Name="Physics" Category="Seeds" Weight="0" Takeable="true" Solid="false"></part>
-        <part Name="Render" DisplayName="starapple seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
-        <part Name="Description" Short="One tiny point from a glistening star."></part>
-        <part Name="acegiak_Seed" Result="Starapple Tree" ResultName="Starapple"></part>
-
-    </object>
-
-    <object Name="Witchwood Seed"  Inherits="Item">
-        <part Name="Physics" Weight="0" Category="Seeds" Takeable="true" Solid="false"></part>
-        <part Name="Render" DisplayName="witchwood seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="W" Occluding="false"></part>
-        <part Name="Description" Short="A grain of madness, ready to bloom."></part>
-        <part Name="acegiak_Seed" Result="Witchwood Tree" ResultName="witchwood"></part>
-
-    </object>
-
   <object Name="Dreadroot" Load="Merge">
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine" Chance="0"></part>
   </object>
@@ -59,6 +43,7 @@
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
     <part Name="Stacker" />
     <tag Name="ForceSmartUse" />
+    <part Name="Commerce" Value="0.25"/>
   </object>
 
 
@@ -113,6 +98,8 @@
     <part Name="Description" Short="Dried and hollowed out. Nature's canteen."></part>
     <part Name="LiquidVolume" MaxVolume="32" Volume="32" StartVolume="1d3-1" InitialLiquid="water-1000" ManualSeal="true" />
     <intproperty Name="Inorganic" Value="0" />
+    <part Name="Stacker" />
+
   </object>
 
   <object Name="Fresh Gourd" Inherits="Snack">
@@ -124,8 +111,28 @@
     <part Name="PreservableItem" Result="Gourd" Number="1"></part>
     <part Name="PreparedCookingIngredient" type="selfPoison" charges="1"></part>
     <tag Name="ChooseToPreserve"></tag>
+    <part Name="Stacker" />
+
   </object>
 
+
+
+
+    <object Name="Starapple Seed"  Inherits="Seed">
+        <part Name="Physics" Category="Seeds" Weight="0" Takeable="true" Solid="false"></part>
+        <part Name="Render" DisplayName="starapple seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
+        <part Name="Description" Short="One tiny point from a glistening star."></part>
+        <part Name="acegiak_Seed" Result="Starapple Tree" ResultName="Starapple"></part>
+
+    </object>
+
+    <object Name="Witchwood Seed"  Inherits="Seed">
+        <part Name="Physics" Weight="0" Category="Seeds" Takeable="true" Solid="false"></part>
+        <part Name="Render" DisplayName="witchwood seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="W" Occluding="false"></part>
+        <part Name="Description" Short="A grain of madness, ready to bloom."></part>
+        <part Name="acegiak_Seed" Result="Witchwood Tree" ResultName="witchwood"></part>
+
+    </object>
   
   <object Name="Growth Agent Phial" Inherits="Phial">
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="growthagent-1000" />

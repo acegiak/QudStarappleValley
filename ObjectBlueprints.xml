@@ -58,6 +58,7 @@
     <part Name="Description" Short="The hope of new life."></part>
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
     <part Name="Stacker" />
+    <tag Name="ForceSmartUse" />
   </object>
 
 

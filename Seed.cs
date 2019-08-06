@@ -57,12 +57,15 @@ namespace XRL.World.Parts
 		{
 			Object.RegisterPartEvent(this, "GetInventoryActions");
 			Object.RegisterPartEvent(this, "InvCommandPlant");
+			Object.RegisterPartEvent(this, "InvCommandWater");
             Object.RegisterPartEvent(this, "ApplyEffect");
             Object.RegisterPartEvent(this, "EndTurn");
             Object.RegisterPartEvent(this, "GetDisplayName");
             Object.RegisterPartEvent(this, "GetShortDisplayName");
             Object.RegisterPartEvent(this, "GetShortDescription");
             Object.RegisterPartEvent(this, "AccelerateRipening");
+            Object.RegisterPartEvent(this, "CanSmartUse");
+            Object.RegisterPartEvent(this, "CommandSmartUse");
 			base.Register(Object);
 		}
 
@@ -95,9 +98,42 @@ namespace XRL.World.Parts
 
         }
 
-        public void Water(int drams){
-            Ticks();
-            this.wateramount += drams;
+        public void Water(GameObject who){
+            if(ParentObject.CurrentCell == null || who.GetPart<Inventory>() == null){
+                return;
+            }
+
+
+                List<string> ChoiceList = new List<string>();
+                List<char> HotkeyList = new List<char>();
+                char ch = 'a';
+
+                List<GameObject> containers = new List<GameObject>();
+
+
+                foreach(GameObject container in who.GetPart<Inventory>().GetObjects()){
+                    if(container.GetPart<LiquidVolume>() != null && container.GetPart<LiquidVolume>().Volume > 0){
+                        containers.Add(container);
+                        ChoiceList.Add(container.DisplayName);
+                        HotkeyList.Add(ch);
+                        ch = (char)(ch + 1);
+                        
+                    }
+                }
+
+                int designNumber = Popup.ShowOptionList(string.Empty, ChoiceList.ToArray(), HotkeyList.ToArray(), 0, "Choose what to water with.", 60,  false,  true);
+                if(designNumber < 0 ){
+                    return;
+                }
+
+                int PourAmount = 1;
+                string getamount = Popup.AskString("How many drams?","1",3,1,"0123456789");
+                PourAmount = Int32.Parse(getamount);
+                for(int i = 0; i<PourAmount;i++){
+                    containers[designNumber].GetPart<LiquidVolume>().PourIntoCell(who,ParentObject.CurrentCell,1);
+                }
+
+
             //Absorb(drams);
 
         }
@@ -325,15 +361,24 @@ namespace XRL.World.Parts
 		{
             if (E.ID == "GetInventoryActions")
             {
-                if (ParentObject.pPhysics.CurrentCell != null && ParentObject.pPhysics.Takeable)
-                {
-                    E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Plant", 'P', false, "&WP&ylant", "InvCommandPlant", 5);
+                if (ParentObject.pPhysics.CurrentCell != null){
+                    if(ParentObject.pPhysics.Takeable)
+                    {
+                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Plant", 'P', false, "&WP&ylant", "InvCommandPlant", 5);
+                    }else{
+                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Water", 'W', false, "&WW&yater", "InvCommandWater", 5);
+                    }
                 }
             }
             else if (E.ID == "InvCommandPlant")
             {
                 Plant(E.GetParameter<GameObject>("Owner"));
-                        E.RequestInterfaceExit();
+                E.RequestInterfaceExit();
+            }
+            else if (E.ID == "InvCommandWater")
+            {
+                Water(E.GetParameter<GameObject>("Owner"));
+                E.RequestInterfaceExit();
             }else
             // if(E.ID == "ApplyEffect"){
 
@@ -350,6 +395,20 @@ namespace XRL.World.Parts
             //         }
             //     }
             // }
+            if (E.ID == "CanSmartUse")
+			{
+				return true;
+			}
+			if (E.ID == "CommandSmartUse")
+			{
+				//if(E.GetGameObjectParameter("User").GetPart<acegiak_SongBook>() != null){
+					if(this.stage > 0){
+						Plant(E.GetGameObjectParameter("User"));
+					}else if(E.GetGameObjectParameter("User").IsPlayer()){
+						Water(E.GetGameObjectParameter("User"));
+					}
+				//}
+			}
             if (E.ID == "EndTurn" || E.ID == "AccelerateRipening"){
                 Ticks();
             }

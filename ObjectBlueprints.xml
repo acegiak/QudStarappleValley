@@ -135,18 +135,22 @@
     </object>
   
   <object Name="Growth Agent Phial" Inherits="Phial">
+      <part Name="Render" DisplayName="growth agent phial"></part>
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="growthagent-1000" />
       <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
   </object>
   <object Name="Furling Agent Phial" Inherits="Phial">
+    <part Name="Render" DisplayName="furling agent phial"></part>
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="furlingagent-1000" />
       <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
   </object>
   <object Name="Restraining Agent Phial" Inherits="Phial">
+      <part Name="Render" DisplayName="restraining agent phial"></part>
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="restrainingagent-1000" />
       <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
   </object>
   <object Name="Soothing Agent Phial" Inherits="Phial">
+      <part Name="Render" DisplayName="soothing agent phial"></part>
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="soothingagent-1000" />
     <part Name="TinkerItem" Bits="05" CanDisassemble="false" CanBuild="true" CanRepair="false"></part>
   </object>

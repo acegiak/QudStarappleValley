@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
 using XRL.World.Parts.Mutation;
+using XRL.World.Capabilities;
 
 namespace XRL.World.Parts
 {
@@ -135,9 +136,24 @@ namespace XRL.World.Parts
                 int PourAmount = 1;
                 string getamount = Popup.AskString("How many drams?","1",3,1,"0123456789");
                 PourAmount = Int32.Parse(getamount);
-                for(int i = 0; i<PourAmount;i++){
-                    containers[designNumber].GetPart<LiquidVolume>().PourIntoCell(who,ParentObject.CurrentCell,1);
+                if(PourAmount > containers[designNumber].GetPart<LiquidVolume>().Volume){
+                    PourAmount = containers[designNumber].GetPart<LiquidVolume>().Volume;
                 }
+                if(GetPuddle() == null && PourAmount > 0){
+                    containers[designNumber].GetPart<LiquidVolume>().PourIntoCell(who,ParentObject.CurrentCell,1,true);
+                    IPart.AddPlayerMessage("PourFirst");
+                    PourAmount = PourAmount - 1;
+
+                    if(PourAmount > 0 && GetPuddle() != null){
+                        IPart.AddPlayerMessage("PourRestStart");
+                        GetPuddle().MixWith(containers[designNumber].GetPart<LiquidVolume>().Split(PourAmount));
+                        IPart.AddPlayerMessage("PourRest");
+                    }
+
+                }else{
+                    containers[designNumber].GetPart<LiquidVolume>().PourIntoCell(who,ParentObject.CurrentCell,PourAmount,true);
+                }
+
 
 
             //Absorb(drams);
@@ -370,9 +386,9 @@ namespace XRL.World.Parts
                 if (ParentObject.pPhysics.CurrentCell != null){
                     if(ParentObject.pPhysics.Takeable)
                     {
-                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Plant", 'P', false, "&WP&ylant", "InvCommandPlant", 5);
+                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("plant", 'p', false, "&Wp&ylant", "InvCommandPlant", 5);
                     }else{
-                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Water", 'W', false, "&WW&yater", "InvCommandWater", 5);
+                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("water", 'w', false, "&Ww&yater", "InvCommandWater", 5);
                     }
                 }
             }
@@ -426,6 +442,18 @@ namespace XRL.World.Parts
                 // +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
                 // +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString()
                 // E.SetParameter("ShortDescription", this.description);
+                if(Scanning.HasScanningFor(XRLCore.Core.Game.Player.Body,Scanning.Scan.Bio)){
+                    int drams = 0;
+                    if(GetPuddle() != null){
+                        if(debugstring() == "thriving" || debugstring() == "dry"){
+                            drams = GetPuddle().Volume;
+                        }
+                    }
+                    int count = drams * stageLength;
+                    int days = (int)Math.Floor((double)count/1200);
+                    int hours = (int)Math.Floor((double)(count%1200)/(1200/24));
+                    E.SetParameter("Postfix", E.GetParameter("Postfix") + "\n&gBIOSCAN: Suitable water for "+days.ToString()+"d "+hours.ToString()+"h.");
+                }
             }
             if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
                  if(this.stage > 0){

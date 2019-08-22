@@ -77,7 +77,7 @@
   </object> -->
 
 <object Name="Watering Can" Inherits="Tool">
-    <part Name="Render" DisplayName="&amp;cwatering can" Tile="Tiles/sw_box.bmp" ColorString="&amp;c" DetailColor="C"></part>
+    <part Name="Render" DisplayName="&amp;cwatering can" Tile="Items/wateringcan.png" ColorString="&amp;c" DetailColor="K"></part>
     <part Name="Description" Short="Pours liquid, a single dram at a time."></part>
     <part Name="Metal"></part>
     <part Name="LiquidVolume" MaxVolume="64" Volume="64" StartVolume="1d12-1" InitialLiquid="water-1000" ManualSeal="true" />

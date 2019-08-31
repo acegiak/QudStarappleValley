@@ -42,6 +42,9 @@ namespace XRL.World.Parts
 			LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidMead.ID), new acegiak_LiquidMead());
 			LiquidVolume.ComponentLiquidNameMap.Add("mead", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidMead.ID)]);
 
+            Debug.Log("Initializing Agricultural Liquids - COMPLETE.");
+			
+
 
 			// LiquidVolume.ComponentLiquidTypes.Add(Convert.ToByte(acegiak_LiquidGrapeJuice.ID), new acegiak_LiquidGrapeJuice());
 			// LiquidVolume.ComponentLiquidNameMap.Add("grapejuice", LiquidVolume.ComponentLiquidTypes[Convert.ToByte(acegiak_LiquidGrapeJuice.ID)]);

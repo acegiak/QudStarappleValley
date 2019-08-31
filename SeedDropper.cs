@@ -11,7 +11,7 @@ namespace XRL.World.Parts
 	[Serializable]
 	public class acegiak_SeedDropper : IPart
 	{
-		public int Chance = 25;
+		public int Chance = 35;
 
 		public string Seed = null;
 

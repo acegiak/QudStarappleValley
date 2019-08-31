@@ -1,12 +1,14 @@
 
 using System;
-using XRL.Rules;
-using XRL.UI;
 using XRL.Core;
 using XRL.World.Parts.Effects;
 using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
+using XRL.Rules;
+using XRL.UI;
+using XRL.World.AI.GoalHandlers;
+using System.Linq;
 
 namespace XRL.World.Parts
 {
@@ -44,42 +46,47 @@ namespace XRL.World.Parts
 		}
 
 
-        public void Water(){
+        public void Water(GameObject who){
+			LiquidVolume volume = ParentObject.GetPart<LiquidVolume>();
+			if(volume == null || volume.Volume <= 0){
+				Popup.Show(ParentObject.The+ParentObject.DisplayNameOnly+" is empty.");
+				return;
+			}
             //IPart.AddPlayerMessage("startwater");
-            string text = PickDirectionS();
-            if (!string.IsNullOrEmpty(text))
-            {
-            //IPart.AddPlayerMessage("gotdir");
-                Cell cellFromDirection = ParentObject.Equipped.pPhysics.CurrentCell.GetCellFromDirection(text);
-                if (cellFromDirection != null)
-                {
-                    //IPart.AddPlayerMessage("gotcell");
-                    LiquidVolume volume = ParentObject.GetPart<LiquidVolume>();
-                    if(volume == null || volume.Volume <= 0){
-                        Popup.Show(ParentObject.The+ParentObject.DisplayNameOnly+" doesn't contain any liquid.");
-                        return;
-                    }
-                    //IPart.AddPlayerMessage("pour");
-                    volume.PourIntoCell(ParentObject, cellFromDirection,1);
-                    CellSplash(cellFromDirection);
-                }
-            }
-        }
 
-        public void CellSplash(Cell cell){
-            if ( cell.ParentZone == XRLCore.Core.Game.ZoneManager.ActiveZone)
+			List<Cell> list = PickFieldAdjacent(9,who,"Water").Where(b=>b.IsPassable(null,false)).ToList();
+
+			//List<Cell> list = PickBurst(1,3,false,AllowVis.OnlyVisible);
+			//IPart.AddPlayerMessage("picked");
+
+			if (list == null)
 			{
-				for (int i = 0; i < 3; i++)
-				{
-					float num = 0f;
-					float num2 = 0f;
-					float num3 = (float)XRL.Rules.Stat.RandomCosmetic(0, 359) / 58f;
-					num = (float)Math.Sin(num3) / 3f;
-					num2 = (float)Math.Cos(num3) / 3f;
-					XRLCore.ParticleManager.Add(ConsoleLib.Console.ColorUtility.StripBackgroundFormatting(ParentObject.pRender.ColorString + "."), cell.X, cell.Y, num, num2, 5, 0f, 0f);
+				//IPart.AddPlayerMessage("none");
+				return;
+			}
+			//IPart.AddPlayerMessage("do");
+
+            int PourAmount = (int)Math.Max(1,Math.Floor((double)(ParentObject.GetPart<LiquidVolume>().Volume/list.Count)));
+            string getamount = Popup.AskString("How many drams each?",PourAmount.ToString(),3,1,"0123456789");
+            PourAmount = Int32.Parse(getamount);
+			foreach (Cell item in list)
+			{
+				//IPart.AddPlayerMessage("cell");
+				if(item.IsPassable(null,false)){
+					if(volume == null || volume.Volume <= 0){
+						Popup.Show(ParentObject.The+ParentObject.DisplayNameOnly+" has run dry.");
+						return;
+					}
+					acegiak_Seed.DoWater(who,ParentObject,item,PourAmount);
+					//IPart.AddPlayerMessage("pour");
+					//volume.PourIntoCell(ParentObject, item,1);
 				}
 			}
+
+           
         }
+
+
 		public override bool FireEvent(Event E)
 		{
             if (E.ID == "GetInventoryActions")
@@ -96,11 +103,19 @@ namespace XRL.World.Parts
             // }
             else if (E.ID == "CommandWater")
             {
-                if(ParentObject.Equipped == null){
-                    Popup.Show("You must have a watering can equipped to water.");
-                }
-                E.RequestInterfaceExit();
-                Water();
+                // if(ParentObject.Equipped == null){
+                //     Popup.Show("You must have a watering can equipped to water.");
+                // }
+				GameObject who = E.GetGameObjectParameter("Owner");
+				if(who == null){
+					who = ParentObject.Equipped;
+				}
+				if(who == null){
+					who = ParentObject;
+				}
+                Water(who);
+				E.RequestInterfaceExit();
+
             }else
             if (E.ID == "Equipped")
 			{

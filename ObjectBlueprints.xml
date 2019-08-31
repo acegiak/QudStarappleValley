@@ -77,7 +77,7 @@
   </object> -->
 
 <object Name="Watering Can" Inherits="Tool">
-    <part Name="Render" DisplayName="&amp;cwatering can" Tile="Tiles/sw_box.bmp" ColorString="&amp;c" DetailColor="C"></part>
+    <part Name="Render" DisplayName="&amp;cwatering can" Tile="Items/wateringcan.png" ColorString="&amp;c" DetailColor="K"></part>
     <part Name="Description" Short="Pours liquid, a single dram at a time."></part>
     <part Name="Metal"></part>
     <part Name="LiquidVolume" MaxVolume="64" Volume="64" StartVolume="1d12-1" InitialLiquid="water-1000" ManualSeal="true" />
@@ -92,7 +92,7 @@
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="Harvestable" OnSuccess="Fresh Gourd" OnSuccessAmount="1d1" StartRipeChance="1:5" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="R" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="500"></part>
   </object>
-
+<!-- 
   <object Name="Gourd" Inherits="WaterContainer">
     <part Name="Render" DisplayName="&amp;Wgo&amp;Ru&amp;Wrd" ColorString="&amp;W" DetailColor="R" Tile="Items/sw_canteen.png"></part>
     <part Name="Description" Short="Dried and hollowed out. Nature's canteen."></part>
@@ -100,7 +100,7 @@
     <intproperty Name="Inorganic" Value="0" />
     <part Name="Stacker" />
 
-  </object>
+  </object> -->
 
   <object Name="Fresh Gourd" Inherits="Snack">
     <part Name="Render" DisplayName="&amp;Gfresh &amp;wgo&amp;Gu&amp;wrd" ColorString="&amp;w" DetailColor="G" Tile="Items/sw_canteen.png"></part>
@@ -112,10 +112,44 @@
     <part Name="PreparedCookingIngredient" type="selfPoison" charges="1"></part>
     <tag Name="ChooseToPreserve"></tag>
     <part Name="Stacker" />
-
   </object>
 
 
+  <object Name="Moxy" Inherits="Plant">
+    <part Name="Render" DisplayName="&amp;wmoxy vine" Tile="creatures/sw_weeds1.bmp" ColorString="&amp;w" DetailColor="R"></part>
+    <part Name="Description" Short="Broad, papery leaves glutton themselves on every dribble of moisture the wastes into their soil."></part>
+    <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
+    <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
+    <part Name="Harvestable" OnSuccess="Moxy Leaves" OnSuccessAmount="1d3" StartRipeChance="1:5" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="G" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="g" RegenTime="500"></part>
+  </object>
+
+
+  <object Name="Moxy Leaves" Inherits="Snack">
+    <part Name="Render" DisplayName="&amp;gmoxy leaves" ColorString="&amp;w" DetailColor="G" Tile="Items/sw_lah_petals.bmp"></part>
+    <part Name="Commerce" Value="10"></part>
+    <part Name="Food" Satiation="Snack" Thirst="200" Gross="true" IllOnEat="true"></part>
+    <part Name="Description" Short="Heavy green moxy leaves, dense with confidence."></part>
+    <part Name="Physics" Weight="1"></part>
+    <part Name="PreservableItem" Result="Dried Moxy" Number="3" ></part>
+    <part Name="PreparedCookingIngredient" type="willpower" charges="2"></part>
+    <tag Name="ChooseToPreserve"></tag>
+    <tag Name="FermentTo" Value="beer"/>
+    <part Name="Stacker" />
+  </object>
+
+  <object Name="Dried Moxy" Inherits="Preservable">
+    <part Name="Render" DisplayName="&amp;wmoxy pearl" RenderString="%" ColorString="&amp;y" TileColor="&amp;y" DetailColor="y" RenderLayer="5" Tile="Items/sw_smallstone.bmp"></part>
+    <part Name="Commerce" Value="6"></part>
+    <part Name="Description" Short="Rich moxy leaves were rolled and dried into pearls waiting to release their credit under ignition."></part>
+    <part Name="PreparedCookingIngredient" type="regenLowtier" charges="1"></part>
+    <tag Name="Plant"></tag>
+    <part Name="Food" Satiation="Snack" Thirst="200" Gross="true" IllOnEat="true"></part>
+    <part Name="acegiak_Smoked" Effect="Meditating" Duration="2d100"></part>
+    <tag Name="DynamicObjectsTable:Saltmarsh_Ingredients"></tag>
+    <tag Name="DynamicObjectsTable:Hills_Ingredients"></tag>
+    <tag Name="DynamicObjectsTable:Flowerfields_Ingredients"></tag>
+    <tag Name="DynamicObjectsTable:DesertCanyon_Ingredients"></tag>
+  </object>
 
 
     <object Name="Starapple Seed"  Inherits="Seed">

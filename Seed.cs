@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
 using XRL.World.Parts.Mutation;
+using XRL.World.Capabilities;
 
 namespace XRL.World.Parts
 {
@@ -35,6 +36,54 @@ namespace XRL.World.Parts
         public string description;
 
 
+        public static LiquidVolume GetPuddle(Cell cell){
+            foreach(GameObject GO in cell.GetObjects()){
+                LiquidVolume volume = GO.GetPart<LiquidVolume>();
+                if(volume != null){
+                    return volume;
+                }
+            }
+            return null;
+        }
+
+        public static void DoWater(GameObject who,GameObject from, Cell to, int PourAmount){
+                if(PourAmount > from.GetPart<LiquidVolume>().Volume){
+                    PourAmount = from.GetPart<LiquidVolume>().Volume;
+                }
+                if(PourAmount <= 0){
+                    return;
+                }
+                if(GetPuddle(to) == null && PourAmount > 0){
+                    from.GetPart<LiquidVolume>().PourIntoCell(who,to,1,true);
+                    //IPart.AddPlayerMessage("PourFirst");
+                    PourAmount = PourAmount - 1;
+
+                    if(PourAmount > 0 && GetPuddle(to) != null){
+                        //IPart.AddPlayerMessage("PourRestStart");
+                        GetPuddle(to).MixWith(from.GetPart<LiquidVolume>().Split(PourAmount));
+                        //IPart.AddPlayerMessage("PourRest");
+                    }
+
+                }else{
+                    from.GetPart<LiquidVolume>().PourIntoCell(who,to,PourAmount,true);
+                }
+                CellSplash(to,"&"+from.GetPart<LiquidVolume>().GetPrimaryLiquidColor());
+        }
+
+        public static void CellSplash(Cell cell,string Color){
+            if ( cell.ParentZone == XRLCore.Core.Game.ZoneManager.ActiveZone)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					float num = 0f;
+					float num2 = 0f;
+					float num3 = (float)XRL.Rules.Stat.RandomCosmetic(0, 359) / 58f;
+					num = (float)Math.Sin(num3) / 3f;
+					num2 = (float)Math.Cos(num3) / 3f;
+					XRLCore.ParticleManager.Add(ConsoleLib.Console.ColorUtility.StripBackgroundFormatting(Color+"."), cell.X, cell.Y, num, num2, 5, 0f, 0f);
+				}
+			}
+        }
 
 		public acegiak_Seed()
 		{
@@ -110,35 +159,32 @@ namespace XRL.World.Parts
             }
 
 
-                List<string> ChoiceList = new List<string>();
-                List<char> HotkeyList = new List<char>();
-                char ch = 'a';
+            List<string> ChoiceList = new List<string>();
+            List<char> HotkeyList = new List<char>();
+            char ch = 'a';
 
-                List<GameObject> containers = new List<GameObject>();
+            List<GameObject> containers = new List<GameObject>();
 
 
-                foreach(GameObject container in who.GetPart<Inventory>().GetObjects()){
-                    if(container.GetPart<LiquidVolume>() != null && container.GetPart<LiquidVolume>().Volume > 0){
-                        containers.Add(container);
-                        ChoiceList.Add(container.DisplayName);
-                        HotkeyList.Add(ch);
-                        ch = (char)(ch + 1);
-                        
-                    }
+            foreach(GameObject container in who.GetPart<Inventory>().GetObjects()){
+                if(container.GetPart<LiquidVolume>() != null && container.GetPart<LiquidVolume>().Volume > 0){
+                    containers.Add(container);
+                    ChoiceList.Add(container.DisplayName);
+                    HotkeyList.Add(ch);
+                    ch = (char)(ch + 1);
+                    
                 }
+            }
 
-                int designNumber = Popup.ShowOptionList(string.Empty, ChoiceList.ToArray(), HotkeyList.ToArray(), 0, "Choose what to water with.", 60,  false,  true);
-                if(designNumber < 0 ){
-                    return;
-                }
+            int designNumber = Popup.ShowOptionList(string.Empty, ChoiceList.ToArray(), HotkeyList.ToArray(), 0, "Choose what to water with.", 60,  false,  true);
+            if(designNumber < 0 ){
+                return;
+            }
 
-                int PourAmount = 1;
-                string getamount = Popup.AskString("How many drams?","1",3,1,"0123456789");
-                PourAmount = Int32.Parse(getamount);
-                for(int i = 0; i<PourAmount;i++){
-                    containers[designNumber].GetPart<LiquidVolume>().PourIntoCell(who,ParentObject.CurrentCell,1);
-                }
-
+            int PourAmount = 1;
+            string getamount = Popup.AskString("How many drams?","1",3,1,"0123456789");
+            PourAmount = Int32.Parse(getamount);
+            DoWater(who,containers[designNumber],ParentObject.CurrentCell,PourAmount);
 
             //Absorb(drams);
 
@@ -146,13 +192,7 @@ namespace XRL.World.Parts
 
         public LiquidVolume GetPuddle(){
             Cell cell = ParentObject.CurrentCell;
-            foreach(GameObject GO in cell.GetObjects()){
-                LiquidVolume volume = GO.GetPart<LiquidVolume>();
-                if(volume != null){
-                    return volume;
-                }
-            }
-            return null;
+            return GetPuddle(cell);
         }
 
         public void LengthMultiplier(){
@@ -370,9 +410,9 @@ namespace XRL.World.Parts
                 if (ParentObject.pPhysics.CurrentCell != null){
                     if(ParentObject.pPhysics.Takeable)
                     {
-                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Plant", 'P', false, "&WP&ylant", "InvCommandPlant", 5);
+                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("plant", 'p', false, "&Wp&ylant", "InvCommandPlant", 5);
                     }else{
-                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Water", 'W', false, "&WW&yater", "InvCommandWater", 5);
+                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("water", 'w', false, "&Ww&yater", "InvCommandWater", 5);
                     }
                 }
             }
@@ -426,6 +466,18 @@ namespace XRL.World.Parts
                 // +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
                 // +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString()
                 // E.SetParameter("ShortDescription", this.description);
+                if(Scanning.HasScanningFor(XRLCore.Core.Game.Player.Body,Scanning.Scan.Bio)){
+                    int drams = 0;
+                    if(GetPuddle() != null){
+                        if(debugstring() == "thriving" || debugstring() == "dry"){
+                            drams = GetPuddle().Volume;
+                        }
+                    }
+                    int count = drams * stageLength;
+                    int days = (int)Math.Floor((double)count/1200);
+                    int hours = (int)Math.Floor((double)(count%1200)/(1200/24));
+                    E.SetParameter("Postfix", E.GetParameter("Postfix") + "\n&gBIOSCAN: Suitable water for "+days.ToString()+"d "+hours.ToString()+"h.");
+                }
             }
             if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
                  if(this.stage > 0){

@@ -169,41 +169,42 @@ namespace XRL.World.Parts
                 foreach(byte id in volume._ComponentLiquids.Keys.ToList()){
                     //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" test?");
                     if(ferments.ContainsKey(LiquidVolume.ComponentLiquidTypes[id].Name)){
+                        //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" ferments to "+ferments[LiquidVolume.ComponentLiquidTypes[id].Name]+"!");
+
                         if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(LiquidVolume.ComponentLiquidTypes[id].Name)){
-                            byte result = Convert.ToByte(LiquidVolume.ComponentLiquidNameMap[ferments[LiquidVolume.ComponentLiquidTypes[id].Name]].ID);
+                            if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(ferments[LiquidVolume.ComponentLiquidTypes[id].Name])){
+                                byte result = Convert.ToByte(LiquidVolume.ComponentLiquidNameMap[ferments[LiquidVolume.ComponentLiquidTypes[id].Name]].ID);
 
+                                volume._ComponentLiquids[id] = volume._ComponentLiquids[id] - adram;
 
-                            //IPart.AddPlayerMessage(LiquidVolume.ComponentLiquidTypes[id].Name+" ferments to "+LiquidVolume.ComponentLiquidTypes[result].Name+"!");
+                                if(volume._ComponentLiquids[id] <= 0){
+                                    volume._ComponentLiquids.Remove(id);
+                                }
 
-                            volume._ComponentLiquids[id] = volume._ComponentLiquids[id] - adram;
+                                // volume.SetComponent(id, volume._ComponentLiquids[id]-1);
+                                // if(!volume._ComponentLiquids.ContainsKey(result)){
+                                //     volume._ComponentLiquids[result] = 0;
+                                // }
+                                // volume._ComponentLiquids[result] += 1;
 
-                            if(volume._ComponentLiquids[id] <= 0){
-                                volume._ComponentLiquids.Remove(id);
+                                if(!volume._ComponentLiquids.ContainsKey(result)){
+                                    volume._ComponentLiquids[result] = 0;
+                                }
+
+                                volume._ComponentLiquids[result] = volume._ComponentLiquids[result] + adram;
+
+                                // volume.MixWith(
+                                //     new LiquidVolume(result,1)
+                                //     );
+                            }else{
+                                volume._ComponentLiquids[id] = volume._ComponentLiquids[id] - adram;
+
+                                if(volume._ComponentLiquids[id] <= 0){
+                                    volume._ComponentLiquids.Remove(id);
+                                }
+                                volume.Volume -= 1;
+                                ParentObject.GetPart<Inventory>().AddObject(GameObject.create(ferments[LiquidVolume.ComponentLiquidTypes[id].Name]));
                             }
-
-                            // volume.SetComponent(id, volume._ComponentLiquids[id]-1);
-                            // if(!volume._ComponentLiquids.ContainsKey(result)){
-                            //     volume._ComponentLiquids[result] = 0;
-                            // }
-                            // volume._ComponentLiquids[result] += 1;
-
-                            if(!volume._ComponentLiquids.ContainsKey(result)){
-                                volume._ComponentLiquids[result] = 0;
-                            }
-
-                            volume._ComponentLiquids[result] = volume._ComponentLiquids[result] + adram;
-
-                            // volume.MixWith(
-                            //     new LiquidVolume(result,1)
-                            //     );
-                        }else{
-                            volume._ComponentLiquids[id] = volume._ComponentLiquids[id] - adram;
-
-                            if(volume._ComponentLiquids[id] <= 0){
-                                volume._ComponentLiquids.Remove(id);
-                            }
-                            volume.Volume -= 1;
-                            ParentObject.GetPart<Inventory>().AddObject(GameObject.create(ferments[LiquidVolume.ComponentLiquidTypes[id].Name]));
                         }
                     }
                 }
@@ -274,15 +275,19 @@ namespace XRL.World.Parts
             foreach(GameObjectBlueprint bp in bps){
                 if(bp.allparts.ContainsKey("LiquidVolume")){
                     string[] liquidbits = bp.allparts["LiquidVolume"].GetParameter("InitialLiquid").Split('-');
+                    //IPart.AddPlayerMessage("Tryadd initliq:"+liquidbits[0]+" / "+String.Join(", ",LiquidVolume.ComponentLiquidNameMap.Keys.ToList().ToArray()));
+
                     if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(liquidbits[0])){
+                        BaseLiquid L = LiquidVolume.ComponentLiquidNameMap[liquidbits[0]];
                         if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(bp.GetTag("FermentTo"))){
-                            BaseLiquid L = LiquidVolume.ComponentLiquidNameMap[liquidbits[0]];
                             BaseLiquid F = LiquidVolume.ComponentLiquidNameMap[bp.GetTag("FermentTo")];
                             //ferments[L.Name] = Convert.ToByte(F.ID);
-                            //IPart.AddPlayerMessage(L.Name+" can ferment to:"+F.Name+"!");
+                            IPart.AddPlayerMessage(L.Name+" can ferment to:"+F.Name+"!");
                             ferments[L.Name] = F.Name;
                         }else{
-                            ferments[bp.Name] = bp.GetTag("FermentTo");
+                            ferments[L.Name] = bp.GetTag("FermentTo");
+                            IPart.AddPlayerMessage(L.Name+" can ferment to:"+bp.GetTag("FermentTo")+"!");
+
                         }
                     }
                 }else{
@@ -290,9 +295,11 @@ namespace XRL.World.Parts
                         BaseLiquid F = LiquidVolume.ComponentLiquidNameMap[bp.GetTag("FermentTo")];
                         //ferments[bp.Name] = Convert.ToByte(F.ID);
                         ferments[bp.Name] = F.Name;
-                        //IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.Name+"!");
+                        IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.Name+"!");
                     }else{
                         ferments[bp.Name] = bp.GetTag("FermentTo");
+                        IPart.AddPlayerMessage(bp.Name+" can ferment to:"+bp.GetTag("FermentTo")+"!");
+
                     }
                 }
                 

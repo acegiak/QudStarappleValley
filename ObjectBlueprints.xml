@@ -90,17 +90,17 @@
     <part Name="Description" Short="A tanlge of wiry boughs and leaden leaves, sheening in the light."></part>
     <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
-    <part Name="Harvestable" OnSuccess="Fresh Gourd" OnSuccessAmount="1d1" StartRipeChance="1:5" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="R" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="500"></part>
+    <part Name="Harvestable" OnSuccess="Fresh Gourd" OnSuccessAmount="1d1" StartRipeChance="1:10" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="R" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="1000"></part>
   </object>
-<!-- 
-  <object Name="Gourd" Inherits="WaterContainer">
+
+  <object Name="Gourd" Load="Merge">
     <part Name="Render" DisplayName="&amp;Wgo&amp;Ru&amp;Wrd" ColorString="&amp;W" DetailColor="R" Tile="Items/sw_canteen.png"></part>
     <part Name="Description" Short="Dried and hollowed out. Nature's canteen."></part>
     <part Name="LiquidVolume" MaxVolume="32" Volume="32" StartVolume="1d3-1" InitialLiquid="water-1000" ManualSeal="true" />
     <intproperty Name="Inorganic" Value="0" />
     <part Name="Stacker" />
 
-  </object> -->
+  </object>
 
   <object Name="Fresh Gourd" Inherits="Snack">
     <part Name="Render" DisplayName="&amp;Gfresh &amp;wgo&amp;Gu&amp;wrd" ColorString="&amp;w" DetailColor="G" Tile="Items/sw_canteen.png"></part>
@@ -120,7 +120,7 @@
     <part Name="Description" Short="Broad, papery leaves glutton themselves on every dribble of moisture the wastes into their soil."></part>
     <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
-    <part Name="Harvestable" OnSuccess="Moxy Leaves" OnSuccessAmount="1d3" StartRipeChance="1:5" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="G" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="g" RegenTime="500"></part>
+    <part Name="Harvestable" OnSuccess="Moxy Leaves" OnSuccessAmount="1d3" StartRipeChance="1:10" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="G" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="g" RegenTime="1000"></part>
   </object>
 
 
@@ -167,6 +167,38 @@
         <part Name="acegiak_Seed" Result="Witchwood Tree" ResultName="witchwood"></part>
 
     </object>
+
+    
+  <object Name="Arsplice Seed" Load="Merge">
+        <part Name="acegiak_Seed" Result="wishing tree" ResultName="arsplice"></part>
+  </object>
+
+
+  <object Name="wishing tree" Inherits="Plant">
+    <part Name="Render" DisplayName="wishing tree" ColorString="&amp;w" Tile="terrain/sw_fattree2.bmp" TileColor="&amp;w" DetailColor="g" Occluding="true"></part>
+    <part Name="Description" Short="As the wind pulls against it, the limbs of the tree sob quietly to themselves, grieving a being they might have been."></part>
+    <tag Name="HangingSupport" />
+    <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
+    <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
+    <part Name="acegiak_SeedDropper" Chance="10" Seed="Arsplice Seed"></part>
+    <part Name="Harvestable" OnSuccess="BeingWishes" OnSuccessAmount="1" StartRipeChance="1:10" RipeColor="&amp;r" RipeTileColor="&amp;r" RipeDetailColor="g" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="g" RegenTime="1000"></part>
+  </object>
+  <object Name="BeingWishes" Inherits="Corpse">
+    <part Name="Render" DisplayName="&amp;rwishes of being" ColorString="&amp;r" TileColor="&amp;r" DetailColor="w" Tile="Items/sw_rawmeat1.bmp" />
+    <part Name="Description" Short="Fleshy bits of might-have-been fingers, little slivers of possibly ears, a curl of a lip never smiling.~J211" />
+    <part Name="Food" IllOnEat="true" Message="The meat is tough but the it warms the hope within you." />
+    <part Name="Physics" Weight="3" />
+    <part Name="Commerce" Value="2" />
+    <xtagGrammar iArticle="some" />
+    <tag Name="Meat" />
+    <part Name="PreservableItem" Result="Canned Have-It-All" Number="1"></part>
+    
+  </object>
+
+  <object Name="Rubber Tree Seed" Load="Merge">
+        <part Name="acegiak_Seed" Result="Rubber Tree" ResultName="Rubber Tree"></part>
+  </object>
+  
   
   <object Name="Growth Agent Phial" Inherits="Phial">
       <part Name="Render" DisplayName="growth agent phial"></part>

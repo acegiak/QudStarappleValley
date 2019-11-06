@@ -38,7 +38,7 @@
 
   <object Name="Seed"  Inherits="Item">
     <part Name="Physics" Weight="0" Category="Seeds" Takeable="true" Solid="false"></part>
-    <part Name="Render" DisplayName="seed" Tile="Items/sw_smallstone.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
+    <part Name="Render" DisplayName="seed" Tile="Creatures/sw_sowerseed.bmp" RenderString="." ColorString="&amp;K" DetailColor="r" Occluding="false"></part>
     <part Name="Description" Short="The hope of new life."></part>
     <part Name="acegiak_Seed" Result="Watervine" ResultName="Watervine"></part>
     <part Name="Stacker" />
@@ -198,8 +198,15 @@
   <object Name="Rubber Tree Seed" Load="Merge">
         <part Name="acegiak_Seed" Result="Rubber Tree" ResultName="Rubber Tree"></part>
   </object>
-  
-  
+
+  <object Name="Sowers_Seed" Load="Merge">
+        <part Name="acegiak_Seed" Result="Feral Lah" ResultName="Feral Lah"></part>
+  </object>
+
+  <object Name="Feral Lah" Load="Merge">
+    <part Name="acegiak_SeedDropper" Chance="4" Seed="Sowers_Seed"></part>
+  </object>
+
   <object Name="Growth Agent Phial" Inherits="Phial">
       <part Name="Render" DisplayName="growth agent phial"></part>
     <part Name="LiquidVolume" StartVolume="1" InitialLiquid="growthagent-1000" />

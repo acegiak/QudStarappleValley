@@ -12,9 +12,10 @@ using UnityEngine;
 namespace XRL.Liquids
 {
 	[Serializable]
+	[IsLiquid]
 	public class acegiak_LiquidFurlingAgent : BaseLiquid
 	{
-		public new const int ID = 132;
+		public new const string ID = "furlingagent";
 
 		public new const string Name = "furlingagent";
 
@@ -29,7 +30,7 @@ namespace XRL.Liquids
 
 		}
 		public acegiak_LiquidFurlingAgent()
-			: base(Convert.ToByte(ID), "furlingagent", 350, 2000)
+			: base("furlingagent", 350, 2000)
 		{
 		}
 
@@ -128,10 +129,10 @@ namespace XRL.Liquids
 		{
 			if (Liquid.MaxVolume == -1 && GO.PhaseAndFlightMatches(Liquid.ParentObject) && GO.GetIntProperty("Slimewalking") <= 0 && GO.HasPart("Body"))
 			{
-				int difficulty = 10 + (int)((double)(Liquid.ComponentLiquids[2] * 5) / 1000.0);
+				int difficulty = 10 + (int)((double)(Liquid.ComponentLiquids[ID] * 5) / 1000.0);
 				if (!GO.MakeSave("Strength,Agility", difficulty, null, null, "Furling Agent Restraint"))
 				{
-					GO.ApplyEffect(new cloneStuck(12, Liquid.ComponentLiquids[2] / 100, null));
+					GO.ApplyEffect(new cloneStuck(12, Liquid.ComponentLiquids[ID] / 100, null));
 				}
 			}
 		}

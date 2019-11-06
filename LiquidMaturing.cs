@@ -11,9 +11,10 @@ using Qud.API;
 namespace XRL.Liquids
 {
 	[Serializable]
+	[IsLiquid]
 	public class acegiak_LiquidGrowthAgent : BaseLiquid
 	{
-		public new const int ID = 131;
+		public new const string ID = "growthagent";
 
 		public new const string Name = "growthagent";
 
@@ -25,7 +26,7 @@ namespace XRL.Liquids
 		};
 
 		public acegiak_LiquidGrowthAgent()
-			: base(Convert.ToByte(ID), "growthagent", 350, 2000)
+			: base("growthagent", 350, 2000)
 		{
 		}
 
@@ -150,7 +151,7 @@ namespace XRL.Liquids
 			{
 				return;
 			}
-			int num = 10 + (int)((double)(Liquid.ComponentLiquids[Convert.ToByte(ID)] * 5) / 1000.0);
+			int num = 10 + (int)((double)(Liquid.ComponentLiquids[ID] * 5) / 1000.0);
 			if (!GO.MakeSave("Agility,Toughness", num - GO.GetIntProperty("Stable"), null, null, "Unwanted Growth"))
 			{
 

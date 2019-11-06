@@ -12,9 +12,10 @@ using XRL.World.Parts.Effects;
 namespace XRL.Liquids
 {
 	[Serializable]
+	[IsLiquid]
 	public class acegiak_LiquidSoothingAgent : BaseLiquid
 	{
-		public new const int ID = 134;
+		public new const string ID = "soothingagent";
 
 		public new const string Name = "soothingagent";
 
@@ -26,7 +27,7 @@ namespace XRL.Liquids
 		};
 
 		public acegiak_LiquidSoothingAgent()
-			: base(Convert.ToByte(ID), "soothingagent", 350, 2000)
+			: base("soothingagent", 350, 2000)
 		{
 		}
 

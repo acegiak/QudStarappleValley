@@ -12,9 +12,10 @@ using XRL.World.Parts.Effects;
 namespace XRL.Liquids
 {
 	[Serializable]
+	[IsLiquid]
 	public class acegiak_LiquidRestrainingAgent : BaseLiquid
 	{
-		public new const int ID = 133;
+		public new const string ID = "restrainingagent";
 
 		public new const string Name = "restrainingagent";
 
@@ -26,7 +27,7 @@ namespace XRL.Liquids
 		};
 
 		public acegiak_LiquidRestrainingAgent()
-			: base(Convert.ToByte(ID), "restrainingagent", 350, 2000)
+			: base("restrainingagent", 350, 2000)
 		{
 		}
 
@@ -131,10 +132,10 @@ namespace XRL.Liquids
 		{
             if (Liquid.MaxVolume == -1 && GO.PhaseAndFlightMatches(Liquid.ParentObject) && GO.GetIntProperty("Slimewalking") <= 0 && GO.HasPart("Body"))
 			{
-				int difficulty = 10 + (int)((double)(Liquid.ComponentLiquids[2] * 5) / 1000.0);
+				int difficulty = 10 + (int)((double)(Liquid.ComponentLiquids[ID] * 5) / 1000.0);
 				if (!GO.MakeSave("Strength,Agility", difficulty, null, null, "Restraining Agent Restraint"))
 				{
-					GO.ApplyEffect(new Stun(12, Liquid.ComponentLiquids[2] / 100));
+					GO.ApplyEffect(new Stun(12, Liquid.ComponentLiquids[ID] / 100));
 				}
 			}
 		}

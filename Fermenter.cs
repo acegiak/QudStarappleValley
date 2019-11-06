@@ -134,9 +134,9 @@ namespace XRL.World.Parts
             int adram = (int)Math.Ceiling(1000f/Math.Max(volume.Volume,1));
 
 
-            foreach(byte id in volume._ComponentLiquids.Keys.ToList()){
-                if(ferments.ContainsKey(LiquidVolume.ComponentLiquidTypes[id].Name)
-                || ferments.Values.ToList().Contains(LiquidVolume.ComponentLiquidTypes[id].Name)){
+            foreach(string id in volume._ComponentLiquids.Keys.ToList()){
+                if(ferments.ContainsKey(id)
+                || ferments.Values.ToList().Contains(id)){
 
                 }else{
                     bads += volume._ComponentLiquids[id];
@@ -148,26 +148,26 @@ namespace XRL.World.Parts
 
             if(ParentObject.pPhysics.Temperature > 30f  || Stat.Rnd2.NextDouble() < bads/total){
 
-                byte result = LiquidVolume.GetLiquidId("putrid");
+                string result = "putrid";
                 if(volume.GetPrimaryLiquid() != null){
-                    volume._ComponentLiquids[Convert.ToByte(volume.GetPrimaryLiquid().ID)] -= adram;
+                    volume._ComponentLiquids[volume.GetPrimaryLiquid().ID] -= adram;
                 }
                 volume._ComponentLiquids[result] += adram;
                 
             }else{
-                foreach(byte id in volume._ComponentLiquids.Keys.ToList()){
-                    if(LiquidVolume.ComponentLiquidTypes.ContainsKey(id)){
-                        string SourceLiquidName = LiquidVolume.ComponentLiquidTypes[id].Name;
+                foreach(string id in volume._ComponentLiquids.Keys.ToList()){
+                    if(LiquidVolume.getLiquid(id) != null){
+                        string SourceLiquidName = id;
                     
                         if(ferments.ContainsKey(SourceLiquidName)){ //Its a liquid that ferments
 
                             string ResultName = ferments[SourceLiquidName];
 
 
-                            if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(SourceLiquidName)){
+                            if(LiquidVolume.getLiquid(SourceLiquidName) != null){
 
-                                if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(ResultName)){
-                                    byte ResultLiquidId = Convert.ToByte(LiquidVolume.ComponentLiquidNameMap[ResultName].ID);
+                                if(LiquidVolume.getLiquid(ResultName) != null){
+                                    string ResultLiquidId = ResultName;
 
                                     volume._ComponentLiquids[id] = volume._ComponentLiquids[id] - adram;
 
@@ -211,13 +211,13 @@ namespace XRL.World.Parts
                             }
                             seen.Add(GO.GetBlueprint().Name);
 
-                            if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(result)){
+                            if(LiquidVolume.getLiquid(result) != null){
                                 volume.Volume += 1;
 
-                                if(!LiquidVolume.ComponentLiquidNameMap.ContainsKey(result)){
+                                if(LiquidVolume.getLiquid(result) == null){
                                     IPart.AddPlayerMessage("ERROR: Tried to ferment "+GO.DisplayName+" but output was invalid:"+result);
                                 }else{
-                                    Byte LiquidID = Convert.ToByte(LiquidVolume.ComponentLiquidNameMap[result].ID);
+                                    string LiquidID = result;
                                 
                                     if(!volume._ComponentLiquids.ContainsKey(LiquidID)){
                                         volume._ComponentLiquids[LiquidID] = 0;
@@ -254,10 +254,10 @@ namespace XRL.World.Parts
                     string[] liquidbits = bp.allparts["LiquidVolume"].GetParameter("InitialLiquid").Split('-');
                     //IPart.AddPlayerMessage("Tryadd initliq:"+liquidbits[0]+" / "+String.Join(", ",LiquidVolume.ComponentLiquidNameMap.Keys.ToList().ToArray()));
 
-                    if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(liquidbits[0])){
-                        BaseLiquid L = LiquidVolume.ComponentLiquidNameMap[liquidbits[0]];
-                        if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(bp.GetTag("FermentTo"))){
-                            BaseLiquid F = LiquidVolume.ComponentLiquidNameMap[bp.GetTag("FermentTo")];
+                    if(LiquidVolume.getLiquid(liquidbits[0]) != null){
+                        BaseLiquid L = LiquidVolume.getLiquid(liquidbits[0]);
+                        if(LiquidVolume.getLiquid(bp.GetTag("FermentTo")) != null){
+                            BaseLiquid F = LiquidVolume.getLiquid(bp.GetTag("FermentTo"));
                             //ferments[L.Name] = Convert.ToByte(F.ID);
                             IPart.AddPlayerMessage(L.Name+" can ferment to:"+F.Name+"!");
                             ferments[L.Name] = F.Name;
@@ -268,8 +268,8 @@ namespace XRL.World.Parts
                         }
                     }
                 }else{
-                    if(LiquidVolume.ComponentLiquidNameMap.ContainsKey(bp.GetTag("FermentTo"))){
-                        BaseLiquid F = LiquidVolume.ComponentLiquidNameMap[bp.GetTag("FermentTo")];
+                    if(LiquidVolume.getLiquid(bp.GetTag("FermentTo")) != null){
+                        BaseLiquid F = LiquidVolume.getLiquid(bp.GetTag("FermentTo"));
                         //ferments[bp.Name] = Convert.ToByte(F.ID);
                         ferments[bp.Name] = F.Name;
                         IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.Name+"!");

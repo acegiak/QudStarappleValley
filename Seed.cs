@@ -260,7 +260,7 @@ namespace XRL.World.Parts
 
 
                 if(GetPuddle() != null){
-                    if(GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidRestrainingAgent.ID))){
+                    if(GetPuddle().ComponentLiquids.ContainsKey(acegiak_LiquidRestrainingAgent.ID)){
                        growInto.pPhysics.Takeable = true;
                        growInto.pPhysics.Weight = growInto.pPhysics.Weight /10;
                        growInto.pRender.DisplayName += " bonsai";
@@ -268,7 +268,7 @@ namespace XRL.World.Parts
                 }
 
                 if(GetPuddle() != null){
-                    if(GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidFurlingAgent.ID))){
+                    if(GetPuddle().ComponentLiquids.ContainsKey(acegiak_LiquidFurlingAgent.ID)){
                         GameObject furled = GameObject.create("FurledPlant");
                         furled.GetPart<Render>().DisplayName = "Furled "+growInto.DisplayNameOnly;
                         furled.GetPart<Render>().DetailColor = ParentObject.pRender.DetailColor;
@@ -285,7 +285,7 @@ namespace XRL.World.Parts
 
 
                 if(GetPuddle() != null){
-                    if(GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidSoothingAgent.ID))){
+                    if(GetPuddle().ComponentLiquids.ContainsKey(acegiak_LiquidSoothingAgent.ID)){
                         if(growInto.GetPart<Brain>() != null){
                             growInto.GetPart<Brain>().PerformReequip();
                             growInto.GetPart<Brain>().BecomeCompanionOf(growInto.ThePlayer);
@@ -316,17 +316,17 @@ namespace XRL.World.Parts
 
         public void Tick(){
             if(GetPuddle() == null
-            || GetPuddle().GetPrimaryLiquid().GetKeyString() != "water"
+            || GetPuddle().GetPrimaryLiquid().ID != "water"
             || GetPuddle().Volume <= 0
             || GetPuddle().Volume > drowamount){
                 health--;
             }else{
                 health++;
                 if(GetPuddle() != null
-                && GetPuddle().ComponentLiquids.ContainsKey(Convert.ToByte(acegiak_LiquidGrowthAgent.ID))
-                && GetPuddle().ComponentLiquids[Convert.ToByte(acegiak_LiquidGrowthAgent.ID)]>0){
+                && GetPuddle().ComponentLiquids.ContainsKey(acegiak_LiquidGrowthAgent.ID)
+                && GetPuddle().ComponentLiquids[acegiak_LiquidGrowthAgent.ID]>0){
                     health+= 4;
-                    GetPuddle().ComponentLiquids[Convert.ToByte(acegiak_LiquidGrowthAgent.ID)] -= 1;
+                    GetPuddle().ComponentLiquids[acegiak_LiquidGrowthAgent.ID] -= 1;
                 }
 
             }
@@ -338,7 +338,7 @@ namespace XRL.World.Parts
                 this.Dead = true;
             }
             if(GetPuddle() != null){
-                GetPuddle().ComponentLiquids[0]--;
+                GetPuddle().ComponentLiquids["water"]--;
                 GetPuddle().Volume--;
                 if (GetPuddle().Volume <= 0)
                 {
@@ -362,8 +362,8 @@ namespace XRL.World.Parts
             if(GetPuddle() == null){
                 return "dry";
             }
-            if(GetPuddle().GetPrimaryLiquid().GetKeyString() != "water"){
-                return "choking on "+GetPuddle().GetPrimaryLiquid().GetKeyString();
+            if(GetPuddle().GetPrimaryLiquid().ID != "water"){
+                return "choking on "+GetPuddle().GetPrimaryLiquid().ID;
             }
             if(GetPuddle().Volume > drowamount){
                 return "drowning";

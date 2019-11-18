@@ -25,7 +25,7 @@ namespace XRL.World.Parts
 
         public long lastseen = 0;
 
-        public int stageLength = 200;
+        public int stageLength = 400;
         public int drowamount = 15;
 
         public bool Dead = false;
@@ -334,7 +334,7 @@ namespace XRL.World.Parts
                 health = 0;
                 stage++;
             }
-            if(health <= -5){
+            if(health <= -120/(stageLength/400)){
                 this.Dead = true;
             }
             if(GetPuddle() != null){

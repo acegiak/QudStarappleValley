@@ -8,6 +8,7 @@ using System.Text;
 using XRL.Liquids;
 using XRL.World.Parts.Mutation;
 using XRL.World.Capabilities;
+using Qud.API;
 
 namespace XRL.World.Parts
 {
@@ -125,20 +126,24 @@ namespace XRL.World.Parts
 		}
 
         public void Plant(GameObject who){
-            Cell cell = ParentObject.CurrentCell;
+            GameObject thisone = ParentObject.RemoveOne();
+            if(thisone.InInventory != null){
+                EquipmentAPI.DropObject(thisone);
+            }
+            Cell cell = thisone.CurrentCell;
             if(cell == null){
                 Popup.Show("Put things on the ground to plant them.");
                 return;
             }
-            if(ParentObject.GetPart<Stacker>() != null && ParentObject.GetPart<Stacker>().StackCount > 1){
-                GameObject gameObject = ParentObject.DeepCopy(true);
-                gameObject.GetPart<Stacker>().StackCount = ParentObject.GetPart<Stacker>().StackCount -1;
-                ParentObject.GetPart<Stacker>().StackCount = 1;
+            if(thisone.GetPart<Stacker>() != null && thisone.GetPart<Stacker>().StackCount > 1){
+                GameObject gameObject = thisone.DeepCopy(true);
+                gameObject.GetPart<Stacker>().StackCount = thisone.GetPart<Stacker>().StackCount -1;
+                thisone.GetPart<Stacker>().StackCount = 1;
                 who.GetPart<Inventory>().AddObject(gameObject);
-                IPart.AddPlayerMessage("You plant one "+ParentObject.DisplayNameOnly+" and collect the rest");
+                IPart.AddPlayerMessage("You plant one "+thisone.DisplayNameOnly+" and collect the rest");
             }
 
-            ParentObject.pPhysics.Takeable = false;
+            thisone.pPhysics.Takeable = false;
 
             LengthMultiplier();
             this.stage = 1;
@@ -407,7 +412,7 @@ namespace XRL.World.Parts
 		{
             if (E.ID == "GetInventoryActions")
             {
-                if (ParentObject.pPhysics.CurrentCell != null){
+                if (ParentObject.pPhysics.CurrentCell != null || ParentObject.InInventory != null){
                     if(ParentObject.pPhysics.Takeable)
                     {
                         E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("plant", 'p', false, "&Wp&ylant", "InvCommandPlant", 5);

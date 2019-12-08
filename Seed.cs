@@ -135,21 +135,20 @@ namespace XRL.World.Parts
                 Popup.Show("Put things on the ground to plant them.");
                 return;
             }
-            if(thisone.GetPart<Stacker>() != null && thisone.GetPart<Stacker>().StackCount > 1){
-                GameObject gameObject = thisone.DeepCopy(true);
-                gameObject.GetPart<Stacker>().StackCount = thisone.GetPart<Stacker>().StackCount -1;
-                thisone.GetPart<Stacker>().StackCount = 1;
-                who.GetPart<Inventory>().AddObject(gameObject);
-                IPart.AddPlayerMessage("You plant one "+thisone.DisplayNameOnly+" and collect the rest");
-            }
+            // if(thisone.GetPart<Stacker>() != null && thisone.GetPart<Stacker>().StackCount > 1){
+            //     GameObject gameObject = thisone.DeepCopy(true);
+            //     gameObject.GetPart<Stacker>().StackCount = thisone.GetPart<Stacker>().StackCount -1;
+            //     thisone.GetPart<Stacker>().StackCount = 1;
+            //     who.GetPart<Inventory>().AddObject(gameObject);
+            //     IPart.AddPlayerMessage("You plant one "+thisone.DisplayNameOnly+" and collect the rest");
+            // }
 
             thisone.pPhysics.Takeable = false;
-
-            LengthMultiplier();
-            this.stage = 1;
+            thisone.GetPart<acegiak_Seed>().LengthMultiplier();
+            thisone.GetPart<acegiak_Seed>().stage = 1;
             //ParentObject.pPhysics.Category = "Plant";
             //ParentObject.RemovePart<NoEffects>();
-            tileupdate();
+            thisone.GetPart<acegiak_Seed>().tileupdate();
             // Statistic statistic = new Statistic("Energy", 0, 10000, 0, ParentObject);
             // statistic.Owner = ParentObject;
             // ParentObject.Statistics.Add("Energy", statistic);
@@ -326,6 +325,9 @@ namespace XRL.World.Parts
             || GetPuddle().Volume > drowamount){
                 health--;
             }else{
+                if(health <0){
+                    health += 4;
+                }
                 health++;
                 if(GetPuddle() != null
                 && GetPuddle().ComponentLiquids.ContainsKey(acegiak_LiquidGrowthAgent.ID)
@@ -416,9 +418,10 @@ namespace XRL.World.Parts
                     if(ParentObject.pPhysics.Takeable)
                     {
                         E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("plant", 'p', false, "&Wp&ylant", "InvCommandPlant", 5);
-                    }else{
-                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("water", 'w', false, "&Ww&yater", "InvCommandWater", 5);
                     }
+                }
+                if(ParentObject.pPhysics.CurrentCell != null && ! ParentObject.pPhysics.Takeable){
+                    E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("water", 'w', false, "&Ww&yater", "InvCommandWater", 5);
                 }
             }
             else if (E.ID == "InvCommandPlant")
@@ -448,7 +451,7 @@ namespace XRL.World.Parts
             // }
             if (E.ID == "CanSmartUse")
 			{
-				return true;
+				return false;
 			}
 			if (E.ID == "CommandSmartUse")
 			{

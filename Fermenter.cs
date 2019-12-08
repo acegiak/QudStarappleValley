@@ -114,7 +114,9 @@ namespace XRL.World.Parts
         }
 
         public void Tick(){
-
+            if(ParentObject.OnWorldMap() || (ParentObject.InInventory != null && ParentObject.InInventory.OnWorldMap())){
+                return;
+            }
             GetFerments();
             LiquidVolume volume = ParentObject.GetPart<LiquidVolume>();
             if(volume == null){

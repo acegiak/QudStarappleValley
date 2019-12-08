@@ -41,6 +41,8 @@ namespace XRL.World.Parts
 			Object.RegisterPartEvent(this, "BeforeDeathRemoval");
 			Object.RegisterPartEvent(this, "GetInventoryActions");
 			Object.RegisterPartEvent(this, "InvCommandCollectSeeds");
+			Object.RegisterPartEvent(this, "CommandSmartUse");
+			Object.RegisterPartEvent(this, "CanSmartUse");
 			base.Register(Object);
             
 		}
@@ -76,14 +78,14 @@ namespace XRL.World.Parts
                         
                         who.TakeObject(gameObject, true, 0);
                     }else{
-                        Popup.Show(ParentObject.The+ParentObject.DisplayNameOnly+ParentObject.GetVerb("have")+" no seeds.");
+                        IPart.AddPlayerMessage(ParentObject.The+ParentObject.DisplayNameOnly+ParentObject.GetVerb("have")+" no seeds.");
 
                     }
                     this.hasSeed = Stat.Rnd2.NextDouble()<Chance/100f;
 
                     this.last = XRLCore.Core.Game.TimeTicks;
                 }else{
-                    Popup.Show(ParentObject.The+ParentObject.DisplayNameOnly+ParentObject.GetVerb("have")+" no seeds.");
+                    IPart.AddPlayerMessage(ParentObject.The+ParentObject.DisplayNameOnly+ParentObject.GetVerb("have")+" no seeds.");
                 }
             }
         }
@@ -113,6 +115,16 @@ namespace XRL.World.Parts
                 CollectSeeds(E.GetParameter<GameObject>("Owner"));
                 E.RequestInterfaceExit();
             }
+            if (E.ID == "CanSmartUse")
+			{
+				return false;
+			}
+            if (E.ID == "CommandSmartUse")
+			{
+				//if(E.GetGameObjectParameter("User").GetPart<acegiak_SongBook>() != null){
+				CollectSeeds(E.GetGameObjectParameter("User"));
+				//}
+			}
             
 			
 			return base.FireEvent(E);

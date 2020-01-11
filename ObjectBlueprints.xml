@@ -51,7 +51,6 @@
     <part Name="Description" Short="A tangle of wiry boughs and leaden leaves, sheening in the light."></part>
     <tag Name="HangingSupport" />
     <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
-    <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="acegiak_SeedDropper" Chance="10" Seed="Lead Slug"></part>
     <part Name="Harvestable" OnSuccess="Lead Slug" OnSuccessAmount="3d8" StartRipeChance="1:5" RipeColor="&amp;R" RipeTileColor="&amp;y" RipeDetailColor="y" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="500"></part>
   </object>
@@ -82,7 +81,6 @@
   <object Name="Gourd Vine" Inherits="Plant">
     <part Name="Render" DisplayName="gourd vine" Tile="Assets_Content_Textures_Tiles_sw_watervine1.bmp" ColorString="&amp;w" DetailColor="R"></part>
     <part Name="Description" Short="A tanlge of wiry boughs and leaden leaves, sheening in the light."></part>
-    <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
     <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="Harvestable" OnSuccess="Fresh Gourd" OnSuccessAmount="1d1" StartRipeChance="1:10" RipeColor="&amp;w" RipeTileColor="&amp;w" RipeDetailColor="R" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="y" RegenTime="1000"></part>
   </object>
@@ -140,9 +138,6 @@
     <part Name="Food" Satiation="Snack" Thirst="200" Gross="true" IllOnEat="true"></part>
     <part Name="acegiak_Smoked" Effect="Meditating" Duration="2d100"></part>
     <tag Name="DynamicObjectsTable:Saltmarsh_Ingredients"></tag>
-    <tag Name="DynamicObjectsTable:Hills_Ingredients"></tag>
-    <tag Name="DynamicObjectsTable:Flowerfields_Ingredients"></tag>
-    <tag Name="DynamicObjectsTable:DesertCanyon_Ingredients"></tag>
   </object>
 
 
@@ -172,8 +167,6 @@
     <part Name="Render" DisplayName="wishing tree" ColorString="&amp;w" Tile="terrain/sw_fattree2.bmp" TileColor="&amp;w" DetailColor="g" Occluding="true"></part>
     <part Name="Description" Short="As the wind pulls against it, the limbs of the tree sob quietly to themselves, grieving a being they might have been."></part>
     <tag Name="HangingSupport" />
-    <tag Name="DynamicObjectsTable:DesertCanyon_FarmablePlants"></tag>
-    <tag Name="DynamicObjectsTable:Hills_FarmablePlants"></tag>
     <part Name="acegiak_SeedDropper" Chance="10" Seed="Arsplice Seed"></part>
     <part Name="Harvestable" OnSuccess="BeingWishes" OnSuccessAmount="1" StartRipeChance="1:10" RipeColor="&amp;r" RipeTileColor="&amp;r" RipeDetailColor="g" UnripeColor="&amp;w" UnripeTileColor="&amp;w" UnripeDetailColor="g" RegenTime="1000"></part>
   </object>

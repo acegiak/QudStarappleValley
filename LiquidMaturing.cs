@@ -60,7 +60,7 @@ namespace XRL.Liquids
 			return 100f;
 		}
 
-        public override bool PouredOn(LiquidVolume Liquid, GameObject GO)
+        public override bool PouredOn(LiquidVolume Liquid, GameObject GO, GameObject By)
 		{
 			if (Liquid.ComponentLiquids.Count != 1)
 			{

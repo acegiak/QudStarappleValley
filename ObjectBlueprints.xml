@@ -1,10 +1,4 @@
 <objects>
-  <object Name="DoNotUse_LiquidTestObjectInitializer" Inherits="Item">
-    <part Name="Render" DisplayName="[Dummy item for Liquid Test]" />
-    <part Name="acegiak_AgriculturalLiquidInitializer" />
-    <tag Name="ExcludeFromDynamicEncounters" />
-</object>
-
 
   <object Name="Plant" Load="Merge">
     <part Name="acegiak_SeedDropper"></part>

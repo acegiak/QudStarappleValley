@@ -1,7 +1,7 @@
 
 using System;
 using XRL.Core;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
@@ -91,7 +91,7 @@ namespace XRL.World.Parts
 		{
             if (E.ID == "GetInventoryActions")
             {
-                E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Water", 'W', false, "&WW&yater", "CommandWater", 5);
+                E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Water", 'W', false, "&WW&yater", "CommandWater");
             }
             // else if (E.ID == "OwnerGetInventoryActions")
             // {
@@ -123,7 +123,7 @@ namespace XRL.World.Parts
                 ActivatedAbilities part = GO.GetPart<ActivatedAbilities>();
 				if (part != null)
 				{
-                    ActivatedAbilityID = part.AddAbility("Water", "CommandWater", "Gear", -1);
+                    ActivatedAbilityID = part.AddAbility("Water", "CommandWater", "Gear");
                     ActivatedAbilityEntry activatedAbilityEntry = part.AbilityByGuid[ActivatedAbilityID];
                     GO.RegisterPartEvent(this, "CommandWater");
 

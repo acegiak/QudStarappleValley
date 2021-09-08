@@ -2,7 +2,7 @@ using System;
 using XRL.Rules;
 using XRL.UI;
 using XRL.Core;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
@@ -38,13 +38,23 @@ namespace XRL.World.Parts
 
 
         public static LiquidVolume GetPuddle(Cell cell){
+			LiquidVolume ret = null;
             foreach(GameObject GO in cell.GetObjects()){
                 LiquidVolume volume = GO.GetPart<LiquidVolume>();
                 if(volume != null){
-                    return volume;
+
+					if(ret != null){
+						ret.MixWith(volume);
+						GO.Destroy();
+					}else{
+						ret = volume;
+					}
+                    if(volume.MaxVolume == -1){
+                        volume.MaxVolume = 10000;
+                    }
                 }
             }
-            return null;
+            return ret;
         }
 
         public static void DoWater(GameObject who,GameObject from, Cell to, int PourAmount){
@@ -54,20 +64,24 @@ namespace XRL.World.Parts
                 if(PourAmount <= 0){
                     return;
                 }
-                if(GetPuddle(to) == null && PourAmount > 0){
+				for(int i = 0; i < PourAmount;i++){
                     from.GetPart<LiquidVolume>().PourIntoCell(who,to,1,true);
-                    //IPart.AddPlayerMessage("PourFirst");
-                    PourAmount = PourAmount - 1;
+				}
 
-                    if(PourAmount > 0 && GetPuddle(to) != null){
-                        //IPart.AddPlayerMessage("PourRestStart");
-                        GetPuddle(to).MixWith(from.GetPart<LiquidVolume>().Split(PourAmount));
-                        //IPart.AddPlayerMessage("PourRest");
-                    }
+                // if(GetPuddle(to) == null && PourAmount > 0){
+                //     from.GetPart<LiquidVolume>().PourIntoCell(who,to,1,true);
+                //     //IPart.AddPlayerMessage("PourFirst");
+                //     PourAmount = PourAmount - 1;
 
-                }else{
-                    from.GetPart<LiquidVolume>().PourIntoCell(who,to,PourAmount,true);
-                }
+                //     if(PourAmount > 0 && GetPuddle(to) != null){
+                //         //IPart.AddPlayerMessage("PourRestStart");
+                //         GetPuddle(to).MixWith(from.GetPart<LiquidVolume>().Split(PourAmount));
+                //         //IPart.AddPlayerMessage("PourRest");
+                //     }
+
+                // }else{
+                //     from.GetPart<LiquidVolume>().PourIntoCell(who,to,PourAmount,true);
+                // }
                 CellSplash(to,"&"+from.GetPart<LiquidVolume>().GetPrimaryLiquidColor());
         }
 
@@ -101,34 +115,24 @@ namespace XRL.World.Parts
 			return false;
 		}
 
-
-
-
 		public override bool AllowStaticRegistration()
 		{
 			return true;
 		}
 
-		public override void Register(GameObject Object)
-		{
-			Object.RegisterPartEvent(this, "GetInventoryActions");
-			Object.RegisterPartEvent(this, "InvCommandPlant");
-			Object.RegisterPartEvent(this, "InvCommandWater");
-            Object.RegisterPartEvent(this, "ApplyEffect");
-            Object.RegisterPartEvent(this, "EndTurn");
-            Object.RegisterPartEvent(this, "GetDisplayName");
-            Object.RegisterPartEvent(this, "GetShortDisplayName");
-            Object.RegisterPartEvent(this, "GetShortDescription");
-            Object.RegisterPartEvent(this, "AccelerateRipening");
-            Object.RegisterPartEvent(this, "CanSmartUse");
-            Object.RegisterPartEvent(this, "CommandSmartUse");
-			base.Register(Object);
-		}
-
+	
         public void Plant(GameObject who){
             GameObject thisone = ParentObject.RemoveOne();
-            if(thisone.InInventory != null){
-                EquipmentAPI.DropObject(thisone);
+            if(thisone == null){
+                Popup.Show("got a null object?");
+                return;
+            }
+
+            if(thisone.CurrentCell == null){
+                //Popup.Show("dropped one");
+                XRLCore.Core.Game.Player.Body.CurrentCell.AddObject(thisone);
+                //thisone.InInventory.FireEvent(Event.New("CommandDropObject", "Object", thisone, "Forced", 1).SetSilent(Silent: true));
+                //return;
             }
             Cell cell = thisone.CurrentCell;
             if(cell == null){
@@ -224,9 +228,11 @@ namespace XRL.World.Parts
 
 
         public void Ticks(){
+
             if(stage < 1){
                 return;
             }
+
             if(!this.Dead){
                 long newGrowth = (XRLCore.Core.Game.TimeTicks - this.lastseen);
 
@@ -234,12 +240,17 @@ namespace XRL.World.Parts
                     newGrowth = 0;
                 }
                 this.lastseen = XRLCore.Core.Game.TimeTicks;
+
+                //IPart.AddPlayerMessage("tickcheck:"+this.growth.ToString()+"+"+newGrowth.ToString()+"="+(this.growth+newGrowth).ToString());
                 this.growth += newGrowth;
 
+
+
                 if(this.growth >=stageLength){
-                
+
+                    //IPart.AddPlayerMessage((growth/stageLength).ToString()+" plant growth ticks!");
+
                     for(int i = 0; i < growth/stageLength;i++){
-                        //IPart.AddPlayerMessage("TICKS!");
 
                         Tick();
                     }
@@ -314,7 +325,7 @@ namespace XRL.World.Parts
 
                 ParentObject.FireEvent(new Event("acegiak_SeedGrow","From",ParentObject,"To",growInto));
                 cell.RemoveObject(ParentObject);
-                ParentObject.Destroy(true);
+                ParentObject.Destroy("matured",true,true);
             }
         }
 
@@ -350,6 +361,7 @@ namespace XRL.World.Parts
                 if (GetPuddle().Volume <= 0)
                 {
                     GetPuddle().Empty();
+					GetPuddle().ParentObject.Destroy();
                 }
                 else
                 {
@@ -367,6 +379,9 @@ namespace XRL.World.Parts
                 return "dead";
             }
             if(GetPuddle() == null){
+                return "dry";
+            }
+            if(GetPuddle().GetPrimaryLiquid() == null){
                 return "dry";
             }
             if(GetPuddle().GetPrimaryLiquid().ID != "water"){
@@ -410,70 +425,26 @@ namespace XRL.World.Parts
                 this.description = "A "+this.ResultName+" plant is growing here.";
             }
         }
-		public override bool FireEvent(Event E)
+
+
+		public override bool WantEvent(int ID, int cascade)
 		{
-            if (E.ID == "GetInventoryActions")
-            {
-                if (ParentObject.pPhysics.CurrentCell != null || ParentObject.InInventory != null){
-                    if(ParentObject.pPhysics.Takeable)
-                    {
-                        E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("plant", 'p', false, "&Wp&ylant", "InvCommandPlant", 5);
-                    }
-                }
-                if(ParentObject.pPhysics.CurrentCell != null && ! ParentObject.pPhysics.Takeable){
-                    E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("water", 'w', false, "&Ww&yater", "InvCommandWater", 5);
-                }
-            }
-            else if (E.ID == "InvCommandPlant")
-            {
-                Plant(E.GetParameter<GameObject>("Owner"));
-                E.RequestInterfaceExit();
-            }
-            else if (E.ID == "InvCommandWater")
-            {
-                Water(E.GetParameter<GameObject>("Owner"));
-                E.RequestInterfaceExit();
-            }else
-            // if(E.ID == "ApplyEffect"){
+			return base.WantEvent(ID, cascade)
+            || ID == CanSmartUseEvent.ID
+            || ID == CommandSmartUseEvent.ID
+            || ID == EndTurnEvent.ID
+            || ID == GetDisplayNameEvent.ID
+            || ID == GetInventoryActionsEvent.ID
+            || ID == GetShortDescriptionEvent.ID
+            || ID == GetDisplayNameEvent.ID
+            || ID == InventoryActionEvent.ID;
+		}
 
-            //     Popup.Show("'e got an effect");
-            //     Effect effect = E.GetParameter("Effect") as Effect;     
-            //     if(effect != null && effect is LiquidCovered){
-            //         Popup.Show("'e got liquidcovered:");
+	
+        public override bool HandleEvent(GetShortDescriptionEvent E){
 
-            //         LiquidVolume volume = ((LiquidCovered)effect).Liquid;
-            //         if(volume.GetLiquidName().Contains("fresh water")){
-            //              Popup.Show("'e got wet:"+((LiquidCovered)effect).ContactDrams);
-            //             Water(((LiquidCovered)effect).ContactDrams);
-            //             volume.Volume = 0;
-            //         }
-            //     }
-            // }
-            if (E.ID == "CanSmartUse")
-			{
-				return false;
-			}
-			if (E.ID == "CommandSmartUse")
-			{
-				//if(E.GetGameObjectParameter("User").GetPart<acegiak_SongBook>() != null){
-					if(this.stage > 0){
-						Plant(E.GetGameObjectParameter("User"));
-					}else if(E.GetGameObjectParameter("User").IsPlayer()){
-						Water(E.GetGameObjectParameter("User"));
-					}
-				//}
-			}
-            if (E.ID == "EndTurn" || E.ID == "AccelerateRipening"){
-                Ticks();
-            }
-            if (E.ID == "GetShortDescription" && this.stage > 0){
+            if (this.stage > 0){
                 string debug = "";
-                // debug += 
-                // GetPuddle().GetPrimaryLiquid().GetKeyString()+":"
-                // +GetPuddle().ComponentLiquids[GetPuddle.bPrimary].ToString()
-                // +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
-                // +GetPuddle().ComponentLiquids[GetPuddle.bSecondary].ToString()
-                // E.SetParameter("ShortDescription", this.description);
                 if(Scanning.HasScanningFor(XRLCore.Core.Game.Player.Body,Scanning.Scan.Bio)){
                     int drams = 0;
                     if(GetPuddle() != null){
@@ -484,16 +455,75 @@ namespace XRL.World.Parts
                     int count = drams * stageLength;
                     int days = (int)Math.Floor((double)count/1200);
                     int hours = (int)Math.Floor((double)(count%1200)/(1200/24));
-                    E.SetParameter("Postfix", E.GetParameter("Postfix") + "\n&gBIOSCAN: Suitable water for "+days.ToString()+"d "+hours.ToString()+"h.");
+                    E.Postfix.Append("&gBIOSCAN: Suitable water for "+days.ToString()+"d "+hours.ToString()+"h.");
                 }
             }
-            if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
-                 if(this.stage > 0){
-					 E.AddParameter("DisplayName",new StringBuilder(this.ResultName+" "+this.displayname+ " &y["+debugstring()+"]"));
-                }
-					
+            return true;
+        }
+
+
+		public override bool HandleEvent(GetDisplayNameEvent E)
+		{
+            if(this.stage > 0){
+				E.AddClause("&y["+debugstring()+"&y]");
             }
-			return base.FireEvent(E);
-		}
-	}
+            return true;
+        }
+
+
+		public override bool HandleEvent(InventoryActionEvent E)
+		{
+            if(E.Command == "Plant")
+            {
+                Plant(E.Actor);
+                E.Actor.UseEnergy(1000, "Item");
+                E.RequestInterfaceExit();
+            }
+            else if (E.Command == "Water")
+            {
+                Water(E.Actor);
+                E.Actor.UseEnergy(1000, "Item");
+                E.RequestInterfaceExit();
+            }
+            return true;
+        }
+
+
+		public override bool HandleEvent(GetInventoryActionsEvent E)
+		{
+                if (ParentObject.pPhysics.CurrentCell != null || ParentObject.InInventory != null){
+                    if(ParentObject.pPhysics.Takeable)
+                    {
+                        E.AddAction("plant","&Wp&ylant","Plant",null, 'p', false,  5);
+                    }
+                }
+                if(ParentObject.pPhysics.CurrentCell != null && ! ParentObject.pPhysics.Takeable){
+                    E.AddAction("water","&Ww&yater","Water",null, 'w', false,  5);
+                }
+                return true;
+        }
+
+
+		public override bool HandleEvent(EndTurnEvent E){
+                Ticks();
+                return true;
+        }
+
+
+		public override bool HandleEvent(CanSmartUseEvent E)
+		{
+            if(this.stage > 0){
+                return false;
+            }
+            return true;
+        }
+
+
+		public override bool HandleEvent(CommandSmartUseEvent E)
+		{
+			Water(E.Actor);
+            return true;
+        }
+
+    }
 }

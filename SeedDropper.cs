@@ -2,7 +2,7 @@ using System;
 using XRL.Rules;
 using XRL.UI;
 using XRL.Core;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 using XRL.World.Parts.Skill;
 using System.Collections.Generic;
 
@@ -74,7 +74,7 @@ namespace XRL.World.Parts
                         GameObject gameObject = CreateSeed();
                         string verb = "harvest";
                         string extra = gameObject.a + gameObject.ShortDisplayName;
-                        IPart.XDidY(who, verb, extra, null, false, null, who);
+                        IPart.XDidY(who, verb, extra);
                         
                         who.TakeObject(gameObject, true, 0);
                     }else{
@@ -107,7 +107,7 @@ namespace XRL.World.Parts
             {
                 if (ParentObject.pPhysics.CurrentCell != null)
                 {
-                    E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("CollectSeeds", 'C', false, "&WC&yollect seeds", "InvCommandCollectSeeds", 5);
+                    E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("CollectSeeds", 'C', false, "&WC&yollect seeds", "InvCommandCollectSeeds");
                 }
             }
             else if (E.ID == "InvCommandCollectSeeds")

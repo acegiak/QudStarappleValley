@@ -5,7 +5,7 @@ using XRL.Core;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Parts;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 
 namespace XRL.Liquids
 {
@@ -25,7 +25,7 @@ namespace XRL.Liquids
 		};
 
 		public acegiak_LiquidMead()
-			: base("mead", 350, 2000, 1.1f)
+			: base("mead")
 		{
 		}
 
@@ -85,7 +85,7 @@ namespace XRL.Liquids
 			{
 				num = 0;
 			}
-			if (num > Math.Max(1, Target.Statistics["Toughness"].Modifier * 2) && Target.ApplyEffect(new Confused(Stat.Roll("5d5"), 1)))
+			if (num > Math.Max(1, Target.Statistics["Toughness"].Modifier * 2) && Target.ApplyEffect(new Confused(Stat.Roll("5d5"), 1,3)))
 			{
 				ExitInterface = true;
 			}
@@ -94,7 +94,7 @@ namespace XRL.Liquids
 			return true;
 		}
 
-		public override void RenderBackground(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderBackgroundPrimary(LiquidVolume Liquid, RenderEvent eRender)
 		{
 			eRender.ColorString = "^Y" + eRender.ColorString;
 		}
@@ -145,14 +145,14 @@ namespace XRL.Liquids
 			eRender.ColorString += "&Y";
 		}
 
-		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender, GameObject obj)
 		{
 			int num = XRLCore.CurrentFrame % 60;
 			if (num > 5 && num < 15)
 			{
 				eRender.ColorString = "&Y";
 			}
-			base.RenderSmearPrimary(Liquid, eRender);
+			base.RenderSmearPrimary(Liquid, eRender,obj);
 		}
 
 		public override void ObjectEnteredCell(LiquidVolume Liquid, GameObject GO)

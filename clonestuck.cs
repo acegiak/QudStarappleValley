@@ -1,8 +1,9 @@
 using System;
 using XRL.Core;
 using XRL.UI;
+using XRL.World.Parts;
 
-namespace XRL.World.Parts.Effects
+namespace XRL.World.Effects
 {
 	[Serializable]
 	public class cloneStuck : Effect
@@ -70,7 +71,7 @@ namespace XRL.World.Parts.Effects
 				string verb = "are";
 				string text = Text;
 				string terminalPunctuation = "!";
-				DidX(verb, text, terminalPunctuation,  false, null, null, Object);
+				DidX("are", Text, "!");
 				if (!Object.IsPlayer() && Visible())
 				{
 					Object.ParticleText(Effect.ConsequentialColor(null, Object) + "*" + Text + "*");

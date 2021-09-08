@@ -6,7 +6,7 @@ using XRL.Messages;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Parts;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 using UnityEngine;
 
 namespace XRL.Liquids
@@ -30,7 +30,7 @@ namespace XRL.Liquids
 
 		}
 		public acegiak_LiquidFurlingAgent()
-			: base("furlingagent", 350, 2000)
+			: base("furlingagent")
 		{
 		}
 
@@ -70,7 +70,7 @@ namespace XRL.Liquids
 			return true;
 		}
 
-		public override void RenderBackground(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderBackgroundPrimary(LiquidVolume Liquid, RenderEvent eRender)
 		{
 			eRender.ColorString = "^K" + eRender.ColorString;
 		}
@@ -115,14 +115,14 @@ namespace XRL.Liquids
 			eRender.ColorString += "&K";
 		}
 
-		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender,XRL.World.GameObject obj)
 		{
 			int num = XRLCore.CurrentFrame % 60;
 			if (num > 5 && num < 15)
 			{
 				eRender.ColorString = "&K";
 			}
-			base.RenderSmearPrimary(Liquid, eRender);
+			base.RenderSmearPrimary(Liquid, eRender,obj);
 		}
 
 		public override void ObjectEnteredCell(LiquidVolume Liquid, XRL.World.GameObject GO)

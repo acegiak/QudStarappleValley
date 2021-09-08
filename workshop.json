@@ -1,1 +1,8 @@
-{"workshopId":1781735549,"Title":"Starapple Valley","Description":"* Breaking a plant has a chance of dropping that plant's seed.\n* Interact with plants to attempt to gather seeds without destroying the plant if you have the Harvestry skill.\n* Interact with a seed on the ground to plant it.\n* Pour water on a planted seed to water it.\n* Check back in on it to make sure it doesn't dry out.\n* Watering cans pour water over a multiple spaces.\n\nYou can find the code and report issues on this plugin at: https://github.com/acegiak/QudStarappleValley","Tags":"Building, Farming","Visibility":"2","ImagePath":"preview.png"}
+{
+  "WorkshopId": 1781735549,
+  "Title": "Starapple Valley",
+  "Description": "* Breaking a plant has a chance of dropping that plant's seed.\n* Interact with plants to attempt to gather seeds without destroying the plant if you have the Harvestry skill.\n* Interact with a seed on the ground to plant it.\n* Pour water on a planted seed to water it.\n* Check back in on it to make sure it doesn't dry out.\n* Watering cans pour water over a multiple spaces.\n\nYou can find the code and report issues on this plugin at: https://github.com/acegiak/QudStarappleValley",
+  "Tags": "Building, Farming",
+  "Visibility": "2",
+  "ImagePath": "preview.png"
+}

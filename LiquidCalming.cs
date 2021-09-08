@@ -7,7 +7,7 @@ using XRL.Rules;
 using XRL.World;
 using XRL.World.Parts;
 using Qud.API;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 
 namespace XRL.Liquids
 {
@@ -27,7 +27,7 @@ namespace XRL.Liquids
 		};
 
 		public acegiak_LiquidSoothingAgent()
-			: base("soothingagent", 350, 2000)
+			: base("soothingagent")
 		{
 		}
 
@@ -73,7 +73,7 @@ namespace XRL.Liquids
 			return true;
 		}
 
-		public override void RenderBackground(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderBackgroundPrimary(LiquidVolume Liquid, RenderEvent eRender)
 		{
 			eRender.ColorString = "^K" + eRender.ColorString;
 		}
@@ -118,14 +118,14 @@ namespace XRL.Liquids
 			eRender.ColorString += "&m";
 		}
 
-		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender,GameObject obj)
 		{
 			int num = XRLCore.CurrentFrame % 60;
 			if (num > 5 && num < 15)
 			{
 				eRender.ColorString = "&m";
 			}
-			base.RenderSmearPrimary(Liquid, eRender);
+			base.RenderSmearPrimary(Liquid, eRender,obj);
 		}
 
 		

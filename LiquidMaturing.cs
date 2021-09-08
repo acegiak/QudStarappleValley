@@ -26,7 +26,7 @@ namespace XRL.Liquids
 		};
 
 		public acegiak_LiquidGrowthAgent()
-			: base("growthagent", 350, 2000)
+			: base("growthagent")
 		{
 		}
 
@@ -60,22 +60,22 @@ namespace XRL.Liquids
 			return 100f;
 		}
 
-        public override bool PouredOn(LiquidVolume Liquid, GameObject GO, GameObject By)
-		{
-			if (Liquid.ComponentLiquids.Count != 1)
-			{
-				return true;
-			}
-			if (Liquid.Volume > 0 && GO.HasPart("Stomach") && GO.HasPart("Body") && GO.GetIntProperty("Inorganic") == 0 && GO.HasStat("Toughness"))
-			{
-				BodyPart p = GO.GetPart<Body>()._Body.GetParts().GetRandomElement();
-                BodyPart p2 = GO.GetPart<Body>()._Body.GetParts().GetRandomElement();
-                p2.AddPart(p.DeepCopy(GO,GO.GetPart<Body>()));
-                GO.Statistics["Toughness"].Penalty += 3;
-                IPart.AddPlayerMessage(GO.The+GO.DisplayNameOnly+"'s "+p2.Name+" sprout"+(p2.Plural?"":"s")+" "+(p.Plural?"":"a ")+p.Name+"!");
-			}
-			return true;
-		}
+        // public override void PouredOn(LiquidVolume Liquid, GameObject GO, GameObject By)
+		// {
+		// 	if (Liquid.ComponentLiquids.Count != 1)
+		// 	{
+		// 		return true;
+		// 	}
+		// 	if (Liquid.Volume > 0 && GO.HasPart("Stomach") && GO.HasPart("Body") && GO.GetIntProperty("Inorganic") == 0 && GO.HasStat("Toughness"))
+		// 	{
+		// 		BodyPart p = GO.GetPart<Body>()._Body.GetParts().GetRandomElement();
+        //         BodyPart p2 = GO.GetPart<Body>()._Body.GetParts().GetRandomElement();
+        //         p2.AddPart(p.DeepCopy(GO,GO.GetPart<Body>()));
+        //         GO.Statistics["Toughness"].Penalty += 3;
+        //         IPart.AddPlayerMessage(GO.The+GO.DisplayNameOnly+"'s "+p2.Name+" sprout"+(p2.Plural?"":"s")+" "+(p.Plural?"":"a ")+p.Name+"!");
+		// 	}
+		// 	return true;
+		// }
 
 
 
@@ -90,7 +90,7 @@ namespace XRL.Liquids
 			return true;
 		}
 
-		public override void RenderBackground(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderBackgroundPrimary(LiquidVolume Liquid, RenderEvent eRender)
 		{
 			eRender.ColorString = "^K" + eRender.ColorString;
 		}
@@ -135,14 +135,14 @@ namespace XRL.Liquids
 			eRender.ColorString += "&b";
 		}
 
-		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender)
+		public override void RenderSmearPrimary(LiquidVolume Liquid, RenderEvent eRender, GameObject obj)
 		{
 			int num = XRLCore.CurrentFrame % 60;
 			if (num > 5 && num < 15)
 			{
 				eRender.ColorString = "&b";
 			}
-			base.RenderSmearPrimary(Liquid, eRender);
+			base.RenderSmearPrimary(Liquid, eRender, obj);
 		}
 
 		public override void ObjectEnteredCell(LiquidVolume Liquid, GameObject GO)

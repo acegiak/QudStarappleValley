@@ -8,6 +8,10 @@
     <part Name="acegiak_SeedDropper" Chance="10"></part>
   </object>
 
+  <object Name="Fungus" Load="Merge">
+    <part Name="acegiak_SeedDropper" Chance="10"></part>
+  </object>
+
 
   <object Name="Starapple" Load="Merge">
     <part Name="Corpse" CorpseChance="100" CorpseBlueprint="Starapple Seed" BodyDrop="false" InventoryDrop="true" />

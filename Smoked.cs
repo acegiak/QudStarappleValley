@@ -3,7 +3,7 @@ using System;
 using XRL.Messages;
 using XRL.Rules;
 using XRL.UI;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 
 namespace XRL.World.Parts
 {
@@ -44,7 +44,7 @@ namespace XRL.World.Parts
 			string preposition = "a puff on";
 			GameObject parentObject = ParentObject;
 			bool fromDialog = FromDialog;
-			IPart.XDidYToZ(who, verb, preposition, parentObject, null, null, fromDialog);
+			IPart.XDidYToZ(who, verb, preposition, parentObject);
 			for (int i = 2; i < 5; i++)
 			{
 				ParentObject.Smoke(150, 180);
@@ -62,14 +62,14 @@ namespace XRL.World.Parts
 		{
 		if (E.ID == "GetInventoryActions")
         {
-            E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Smoke", 's',  false, "&Ws&ymoke", "InvCommandSmoke", 10);
+            E.GetParameter<EventParameterGetInventoryActions>("Actions").AddAction("Smoke", 's',  false, "&Ws&ymoke", "InvCommandSmoke");
         }
         else if (E.ID == "InvCommandSmoke" )
         {
             SmokeThis(E.GetGameObjectParameter("Owner"),  true);
             E.RequestInterfaceExit();
             if(Effect != null){
-                Effect effect = Activator.CreateInstance(ModManager.ResolveType("XRL.World.Parts.Effects." + Effect)) as Effect;
+                Effect effect = Activator.CreateInstance(ModManager.ResolveType("XRL.World.Effects." + Effect)) as Effect;
 				if (!string.IsNullOrEmpty(Duration))
 				{
 					effect.Duration = Stat.Roll(Duration);

@@ -2,7 +2,7 @@ using System;
 using XRL.Rules;
 using XRL.UI;
 using XRL.Core;
-using XRL.World.Parts.Effects;
+using XRL.World.Effects;
 using System.Collections.Generic;
 using System.Text;
 using XRL.Liquids;
@@ -55,18 +55,6 @@ namespace XRL.World.Parts
 			return true;
 		}
 
-		public override void Register(GameObject Object)
-		{
-			// Object.RegisterPartEvent(this, "GetInventoryActions");
-			// Object.RegisterPartEvent(this, "InvCommandPlant");
-            // Object.RegisterPartEvent(this, "ApplyEffect");
-            Object.RegisterPartEvent(this, "EndTurn");
-            Object.RegisterPartEvent(this, "GetDisplayName");
-            Object.RegisterPartEvent(this, "GetShortDisplayName");
-            // Object.RegisterPartEvent(this, "GetShortDescription");
-            // Object.RegisterPartEvent(this, "AccelerateRipening");
-			base.Register(Object);
-		}
 
 
         public void Water(int drams){
@@ -92,7 +80,6 @@ namespace XRL.World.Parts
 
 
         public void Ticks(){
-
             long newGrowth = (XRLCore.Core.Game.TimeTicks - this.lastseen);
 
             if(this.lastseen == 0){
@@ -100,6 +87,7 @@ namespace XRL.World.Parts
             }
             this.lastseen = XRLCore.Core.Game.TimeTicks;
             this.growth += newGrowth;
+			//IPart.AddPlayerMessage("fermenter ticks:"+growth.ToString()+"/"+stageLength.ToString());
 
             if(this.growth >=stageLength){
             
@@ -118,6 +106,7 @@ namespace XRL.World.Parts
                 return;
             }
             GetFerments();
+			//IPart.AddPlayerMessage("fermentation:\n"+ferments.ToString());
             LiquidVolume volume = ParentObject.GetPart<LiquidVolume>();
             if(volume == null){
 
@@ -125,6 +114,7 @@ namespace XRL.World.Parts
             }
 
             if(ParentObject.pPhysics.Temperature <15){
+			//IPart.AddPlayerMessage("too cold");
                 return;
             }
             int bads = 0;
@@ -135,13 +125,21 @@ namespace XRL.World.Parts
 
             int adram = (int)Math.Ceiling(1000f/Math.Max(volume.Volume,1));
 
+            foreach(string f in ferments.Keys.ToList()){
+
+                IPart.AddPlayerMessage("ferments:"+f+":"+ferments[f]);
+            }
 
             foreach(string id in volume._ComponentLiquids.Keys.ToList()){
+                IPart.AddPlayerMessage("checking liquid:"+id);
                 if(ferments.ContainsKey(id)
                 || ferments.Values.ToList().Contains(id)){
 
+                    IPart.AddPlayerMessage("good");
                 }else{
                     bads += volume._ComponentLiquids[id];
+
+                    IPart.AddPlayerMessage("bad");
                 }
                 total += volume._ComponentLiquids[id];
             }
@@ -153,6 +151,9 @@ namespace XRL.World.Parts
                 string result = "putrid";
                 if(volume.GetPrimaryLiquid() != null){
                     volume._ComponentLiquids[volume.GetPrimaryLiquid().ID] -= adram;
+                }
+                if(!volume._ComponentLiquids.ContainsKey(result)){
+                    volume._ComponentLiquids[result] = 0;
                 }
                 volume._ComponentLiquids[result] += adram;
                 
@@ -261,11 +262,11 @@ namespace XRL.World.Parts
                         if(LiquidVolume.getLiquid(bp.GetTag("FermentTo")) != null){
                             BaseLiquid F = LiquidVolume.getLiquid(bp.GetTag("FermentTo"));
                             //ferments[L.Name] = Convert.ToByte(F.ID);
-                            IPart.AddPlayerMessage(L.Name+" can ferment to:"+F.Name+"!");
-                            ferments[L.Name] = F.Name;
+                            IPart.AddPlayerMessage(L.ID+" can ferment to:"+F.ID+"!");
+                            ferments[L.ID] = F.ID;
                         }else{
-                            ferments[L.Name] = bp.GetTag("FermentTo");
-                            IPart.AddPlayerMessage(L.Name+" can ferment to:"+bp.GetTag("FermentTo")+"!");
+                            ferments[L.ID] = bp.GetTag("FermentTo");
+                            IPart.AddPlayerMessage(L.ID+" can ferment to:"+bp.GetTag("FermentTo")+"!");
 
                         }
                     }
@@ -273,8 +274,8 @@ namespace XRL.World.Parts
                     if(LiquidVolume.getLiquid(bp.GetTag("FermentTo")) != null){
                         BaseLiquid F = LiquidVolume.getLiquid(bp.GetTag("FermentTo"));
                         //ferments[bp.Name] = Convert.ToByte(F.ID);
-                        ferments[bp.Name] = F.Name;
-                        IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.Name+"!");
+                        ferments[bp.Name] = F.ID;
+                        IPart.AddPlayerMessage(bp.Name+" can  ferments to:"+F.ID+"!");
                     }else{
                         ferments[bp.Name] = bp.GetTag("FermentTo");
                         IPart.AddPlayerMessage(bp.Name+" can ferment to:"+bp.GetTag("FermentTo")+"!");
@@ -290,33 +291,35 @@ namespace XRL.World.Parts
 
 
         
-		public override bool FireEvent(Event E)
+
+
+
+		public override bool WantEvent(int ID, int cascade)
 		{
-
-            if (E.ID == "EndTurn"){
-                Ticks();
-            }
-            // if (E.ID == "GetShortDescription" && this.stage > 0){
-            //     string debug = "";
-            //     // debug += 
-            //     // GetPuddle().GetPrimaryLiquid().GetKeyString()+":"
-            //     // +GetPuddle()._ComponentLiquids[GetPuddle.bPrimary].ToString()
-            //     // +GetPuddle().GetSecondaryLiquid().GetKeyString()+":"
-            //     // +GetPuddle()._ComponentLiquids[GetPuddle.bSecondary].ToString()
-            //     // E.SetParameter("ShortDescription", this.description);
-            // }
-            if (E.ID == "GetDisplayName" || E.ID == "GetShortDisplayName"){
-                if(ParentObject.GetPart<Inventory>() != null && ParentObject.GetPart<Inventory>().Objects.Count() >0){
-                    int count = 0;
-                    foreach(GameObject GO in ParentObject.GetPart<Inventory>().GetObjects()){
-                        count += GO.Count;
-                    }
-       				E.GetParameter<StringBuilder>("Postfix").Append(" &y["+count+" items]");
-
-                }
-					
-            }
-			return base.FireEvent(E);
+			return base.WantEvent(ID, cascade)
+            || ID == EndTurnEvent.ID
+            || ID == GetDisplayNameEvent.ID
+            || ID == GetDisplayNameEvent.ID;
 		}
+
+
+		public override bool HandleEvent(GetDisplayNameEvent E)
+		{
+            if(ParentObject.GetPart<Inventory>() != null && ParentObject.GetPart<Inventory>().Objects.Count() >0){
+                int count = 0;
+                foreach(GameObject GO in ParentObject.GetPart<Inventory>().GetObjects()){
+                    count += GO.Count;
+                }
+                E.AddClause(" &y["+count+" items]");
+            
+            }
+            return true;
+        }
+        		public override bool HandleEvent(EndTurnEvent E){
+                                    Ticks();
+                    return true;
+                }
+
+
 	}
 }
